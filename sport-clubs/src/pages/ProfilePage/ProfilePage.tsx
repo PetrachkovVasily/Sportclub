@@ -3,6 +3,7 @@ import ContentContainer from "../../components/ContentContainer/ContentContainer
 import Profile from "../../components/Profile/Profile";
 import Goals from "../../components/Goals/Goals";
 import Achievements from "../../components/Achievements/Achievements";
+import CompleteInfo from "../../components/CompleteInfo/CompleteInfo";
 
 interface Props {}
 
@@ -11,7 +12,7 @@ function ProfilePage(props: Props) {
 
   return (
     <>
-      <div className="flex flex-col gap-[16px] w-[280px] min-w-[280px]">
+      <div className="flex flex-col gap-[16px] w-[100%]">
         <ContentContainer>
           <Profile />
         </ContentContainer>
@@ -19,8 +20,10 @@ function ProfilePage(props: Props) {
           <Goals />
         </ContentContainer>
       </div>
-      <div className="w-[100%]">1</div>
-      <div className="min-w-[280px]">
+      <div className="w-[100%]">
+        <CompleteInfo />
+      </div>
+      <div className="max-w-[280px] w-[100%]">
         <ContentContainer gap={22} pb={16}>
           <Achievements />
         </ContentContainer>

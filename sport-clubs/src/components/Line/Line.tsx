@@ -2,11 +2,11 @@ import React from "react";
 
 interface Props {}
 
-function Line(props: Props) {
-  const {} = props;
-
+function Line({ height = 2 }) {
   return (
-    <hr className="h-[2px] w-[100%] bg-[#404040] opacity-15 rounded-[1px] max-w-[512px]"></hr>
+    <hr
+      className={`h-[${height}px] w-[100%] bg-[#404040] opacity-15 rounded-[1px] max-w-[512px]`}
+    ></hr>
   );
 }
 

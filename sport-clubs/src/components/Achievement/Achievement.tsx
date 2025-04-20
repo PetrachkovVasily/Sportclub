@@ -10,7 +10,7 @@ function Achievement({ name, info }) {
         alt="AchImg"
         className="w-[38px] h-[38px] rounded-[19px] "
       />
-      <div className="w-[100%] flex flex-col max-w-[186px] ">
+      <div className="w-[100%] flex flex-col max-w-[186px] text-ellipsis overflow-hidden">
         <h3 className="font-semibold text-[14px] text-nowrap text-ellipsis overflow-hidden">
           {name}
         </h3>

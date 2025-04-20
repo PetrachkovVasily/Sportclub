@@ -15,7 +15,7 @@ function Achievements() {
         <NumInfo headNum={16} info={"Achievements"} />
       </div>
       <div className="flex flex-col px-[8px] gap-[16px] w-[100%]">
-        <div className="flex flex-col gap-[8px] w-[100%] ">
+        <div className="flex flex-col gap-[8px] w-[100%] max-w-[232px]">
           <Achievement name={"Super-runner"} info={"run throw 60km 6 times"} />
           <Achievement
             name={"Super-mega-runner"}
