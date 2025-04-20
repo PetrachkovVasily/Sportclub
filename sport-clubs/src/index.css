@@ -1,6 +1,27 @@
 @import "tailwindcss";
+@plugin "flowbite-react/plugin/tailwindcss";
+@source "../.flowbite-react/class-list.json";
 @tailwind utilities;
 @tailwind base;
 @tailwind components;
 /* @plugin "flowbite/plugin";
 @source "../node_modules/flowbite"; */
+
+@layer base {
+  div,
+  section,
+  article,
+  main {
+    box-sizing: border-box;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: #1a1a1a;
+  }
+
+  html {
+    background-color: #f2f2f2;
+  }
+}
