@@ -11,10 +11,21 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as VisibleLayoutImport } from './routes/visibleLayout'
 import { Route as ProfileImport } from './routes/profile'
 import { Route as IndexImport } from './routes/index'
+import { Route as VisibleLayoutFooImport } from './routes/visibleLayout/foo'
+import { Route as VisibleLayoutBarImport } from './routes/visibleLayout/bar'
+import { Route as ProfileStatsImport } from './routes/profile/stats'
+import { Route as ProfileGoalsImport } from './routes/profile/goals'
 
 // Create/Update Routes
+
+const VisibleLayoutRoute = VisibleLayoutImport.update({
+  id: '/visibleLayout',
+  path: '/visibleLayout',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const ProfileRoute = ProfileImport.update({
   id: '/profile',
@@ -26,6 +37,30 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const VisibleLayoutFooRoute = VisibleLayoutFooImport.update({
+  id: '/foo',
+  path: '/foo',
+  getParentRoute: () => VisibleLayoutRoute,
+} as any)
+
+const VisibleLayoutBarRoute = VisibleLayoutBarImport.update({
+  id: '/bar',
+  path: '/bar',
+  getParentRoute: () => VisibleLayoutRoute,
+} as any)
+
+const ProfileStatsRoute = ProfileStatsImport.update({
+  id: '/stats',
+  path: '/stats',
+  getParentRoute: () => ProfileRoute,
+} as any)
+
+const ProfileGoalsRoute = ProfileGoalsImport.update({
+  id: '/goals',
+  path: '/goals',
+  getParentRoute: () => ProfileRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -46,44 +81,145 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileImport
       parentRoute: typeof rootRoute
     }
+    '/visibleLayout': {
+      id: '/visibleLayout'
+      path: '/visibleLayout'
+      fullPath: '/visibleLayout'
+      preLoaderRoute: typeof VisibleLayoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/profile/goals': {
+      id: '/profile/goals'
+      path: '/goals'
+      fullPath: '/profile/goals'
+      preLoaderRoute: typeof ProfileGoalsImport
+      parentRoute: typeof ProfileImport
+    }
+    '/profile/stats': {
+      id: '/profile/stats'
+      path: '/stats'
+      fullPath: '/profile/stats'
+      preLoaderRoute: typeof ProfileStatsImport
+      parentRoute: typeof ProfileImport
+    }
+    '/visibleLayout/bar': {
+      id: '/visibleLayout/bar'
+      path: '/bar'
+      fullPath: '/visibleLayout/bar'
+      preLoaderRoute: typeof VisibleLayoutBarImport
+      parentRoute: typeof VisibleLayoutImport
+    }
+    '/visibleLayout/foo': {
+      id: '/visibleLayout/foo'
+      path: '/foo'
+      fullPath: '/visibleLayout/foo'
+      preLoaderRoute: typeof VisibleLayoutFooImport
+      parentRoute: typeof VisibleLayoutImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface ProfileRouteChildren {
+  ProfileGoalsRoute: typeof ProfileGoalsRoute
+  ProfileStatsRoute: typeof ProfileStatsRoute
+}
+
+const ProfileRouteChildren: ProfileRouteChildren = {
+  ProfileGoalsRoute: ProfileGoalsRoute,
+  ProfileStatsRoute: ProfileStatsRoute,
+}
+
+const ProfileRouteWithChildren =
+  ProfileRoute._addFileChildren(ProfileRouteChildren)
+
+interface VisibleLayoutRouteChildren {
+  VisibleLayoutBarRoute: typeof VisibleLayoutBarRoute
+  VisibleLayoutFooRoute: typeof VisibleLayoutFooRoute
+}
+
+const VisibleLayoutRouteChildren: VisibleLayoutRouteChildren = {
+  VisibleLayoutBarRoute: VisibleLayoutBarRoute,
+  VisibleLayoutFooRoute: VisibleLayoutFooRoute,
+}
+
+const VisibleLayoutRouteWithChildren = VisibleLayoutRoute._addFileChildren(
+  VisibleLayoutRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
+  '/visibleLayout': typeof VisibleLayoutRouteWithChildren
+  '/profile/goals': typeof ProfileGoalsRoute
+  '/profile/stats': typeof ProfileStatsRoute
+  '/visibleLayout/bar': typeof VisibleLayoutBarRoute
+  '/visibleLayout/foo': typeof VisibleLayoutFooRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
+  '/visibleLayout': typeof VisibleLayoutRouteWithChildren
+  '/profile/goals': typeof ProfileGoalsRoute
+  '/profile/stats': typeof ProfileStatsRoute
+  '/visibleLayout/bar': typeof VisibleLayoutBarRoute
+  '/visibleLayout/foo': typeof VisibleLayoutFooRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
+  '/visibleLayout': typeof VisibleLayoutRouteWithChildren
+  '/profile/goals': typeof ProfileGoalsRoute
+  '/profile/stats': typeof ProfileStatsRoute
+  '/visibleLayout/bar': typeof VisibleLayoutBarRoute
+  '/visibleLayout/foo': typeof VisibleLayoutFooRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/profile'
+  fullPaths:
+    | '/'
+    | '/profile'
+    | '/visibleLayout'
+    | '/profile/goals'
+    | '/profile/stats'
+    | '/visibleLayout/bar'
+    | '/visibleLayout/foo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile'
-  id: '__root__' | '/' | '/profile'
+  to:
+    | '/'
+    | '/profile'
+    | '/visibleLayout'
+    | '/profile/goals'
+    | '/profile/stats'
+    | '/visibleLayout/bar'
+    | '/visibleLayout/foo'
+  id:
+    | '__root__'
+    | '/'
+    | '/profile'
+    | '/visibleLayout'
+    | '/profile/goals'
+    | '/profile/stats'
+    | '/visibleLayout/bar'
+    | '/visibleLayout/foo'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ProfileRoute: typeof ProfileRoute
+  ProfileRoute: typeof ProfileRouteWithChildren
+  VisibleLayoutRoute: typeof VisibleLayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ProfileRoute: ProfileRoute,
+  ProfileRoute: ProfileRouteWithChildren,
+  VisibleLayoutRoute: VisibleLayoutRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -97,14 +233,42 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/profile"
+        "/profile",
+        "/visibleLayout"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
     "/profile": {
-      "filePath": "profile.tsx"
+      "filePath": "profile.tsx",
+      "children": [
+        "/profile/goals",
+        "/profile/stats"
+      ]
+    },
+    "/visibleLayout": {
+      "filePath": "visibleLayout.tsx",
+      "children": [
+        "/visibleLayout/bar",
+        "/visibleLayout/foo"
+      ]
+    },
+    "/profile/goals": {
+      "filePath": "profile/goals.tsx",
+      "parent": "/profile"
+    },
+    "/profile/stats": {
+      "filePath": "profile/stats.tsx",
+      "parent": "/profile"
+    },
+    "/visibleLayout/bar": {
+      "filePath": "visibleLayout/bar.tsx",
+      "parent": "/visibleLayout"
+    },
+    "/visibleLayout/foo": {
+      "filePath": "visibleLayout/foo.tsx",
+      "parent": "/visibleLayout"
     }
   }
 }

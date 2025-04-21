@@ -8,7 +8,6 @@ import CompleteInfo from "../../components/CompleteInfo/CompleteInfo";
 interface Props {}
 
 function ProfilePage(props: Props) {
-  const {} = props;
 
   return (
     <>

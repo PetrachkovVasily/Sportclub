@@ -28,4 +28,22 @@
   .active {
     background-color: white;
   }
+
+  select {
+    border: none;
+    outline: none;
+    padding-right: 2px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  select:after {
+    content: "";
+    display: block;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+  }
 }
