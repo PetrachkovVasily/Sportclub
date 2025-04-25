@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as VisibleLayoutImport } from './routes/visibleLayout'
 import { Route as ProfileImport } from './routes/profile'
+import { Route as ClubImport } from './routes/club'
 import { Route as IndexImport } from './routes/index'
 import { Route as VisibleLayoutFooImport } from './routes/visibleLayout/foo'
 import { Route as VisibleLayoutBarImport } from './routes/visibleLayout/bar'
@@ -30,6 +31,12 @@ const VisibleLayoutRoute = VisibleLayoutImport.update({
 const ProfileRoute = ProfileImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ClubRoute = ClubImport.update({
+  id: '/club',
+  path: '/club',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -72,6 +79,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/club': {
+      id: '/club'
+      path: '/club'
+      fullPath: '/club'
+      preLoaderRoute: typeof ClubImport
       parentRoute: typeof rootRoute
     }
     '/profile': {
@@ -150,6 +164,7 @@ const VisibleLayoutRouteWithChildren = VisibleLayoutRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/club': typeof ClubRoute
   '/profile': typeof ProfileRouteWithChildren
   '/visibleLayout': typeof VisibleLayoutRouteWithChildren
   '/profile/goals': typeof ProfileGoalsRoute
@@ -160,6 +175,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/club': typeof ClubRoute
   '/profile': typeof ProfileRouteWithChildren
   '/visibleLayout': typeof VisibleLayoutRouteWithChildren
   '/profile/goals': typeof ProfileGoalsRoute
@@ -171,6 +187,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/club': typeof ClubRoute
   '/profile': typeof ProfileRouteWithChildren
   '/visibleLayout': typeof VisibleLayoutRouteWithChildren
   '/profile/goals': typeof ProfileGoalsRoute
@@ -183,6 +200,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/club'
     | '/profile'
     | '/visibleLayout'
     | '/profile/goals'
@@ -192,6 +210,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/club'
     | '/profile'
     | '/visibleLayout'
     | '/profile/goals'
@@ -201,6 +220,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/club'
     | '/profile'
     | '/visibleLayout'
     | '/profile/goals'
@@ -212,12 +232,14 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ClubRoute: typeof ClubRoute
   ProfileRoute: typeof ProfileRouteWithChildren
   VisibleLayoutRoute: typeof VisibleLayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ClubRoute: ClubRoute,
   ProfileRoute: ProfileRouteWithChildren,
   VisibleLayoutRoute: VisibleLayoutRouteWithChildren,
 }
@@ -233,12 +255,16 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/club",
         "/profile",
         "/visibleLayout"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/club": {
+      "filePath": "club.tsx"
     },
     "/profile": {
       "filePath": "profile.tsx",

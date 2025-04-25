@@ -10,7 +10,13 @@ function SwitchMenu({ menuList }) {
         <Link
           to="/profile/stats"
           aria-current="page"
-          className="w-[100%] h-[28px] inline-block rounded-t-lg active"
+          className="w-[100%] h-[28px] inline-block rounded-t-lg border-b-2 border-[#D4D4D4]/75 "
+          activeProps={{
+            style: {
+              backgroundColor: "white",
+              border: "none",
+            },
+          }}
         >
           Stats
         </Link>
@@ -19,7 +25,13 @@ function SwitchMenu({ menuList }) {
         <Link
           to="/profile/goals"
           aria-current="page"
-          className="w-[100%] h-[28px] inline-block rounded-t-lg active"
+          className="w-[100%] h-[28px] inline-block rounded-t-lg border-b-2 border-[#D4D4D4]/75 "
+          activeProps={{
+            style: {
+              backgroundColor: "white",
+              border: "none",
+            },
+          }}
         >
           Goals
         </Link>

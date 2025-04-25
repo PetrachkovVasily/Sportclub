@@ -9,9 +9,8 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <React.Fragment>
-      {/* <Header /> */}
+      <Header />
       <Outlet />
-      qwerty
     </React.Fragment>
   );
 }

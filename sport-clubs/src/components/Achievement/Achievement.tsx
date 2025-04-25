@@ -1,4 +1,5 @@
 import React from "react";
+import profileImg from "../../assets/profileImg.png";
 
 interface Props {}
 
@@ -6,7 +7,7 @@ function Achievement({ name, info }) {
   return (
     <div className="flex gap-[8px] w-[100%] items-start">
       <img
-        src="public\profileImg.png"
+        src={profileImg}
         alt="AchImg"
         className="w-[38px] h-[38px] rounded-[19px] "
       />

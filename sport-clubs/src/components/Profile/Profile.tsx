@@ -2,6 +2,7 @@ import React from "react";
 import Line from "../Line/Line";
 import NumInfo from "../NumInfo/NumInfo";
 import WeekDay from "../WeekDay/WeekDay";
+import profileImg from "../../assets/profileImg.png";
 
 interface Props {}
 
@@ -21,7 +22,7 @@ function Profile(props: Props) {
     <>
       <div className="flex flex-col gap-[8px] w-[100%] items-center">
         <img
-          src="public\profileImg.png"
+          src={profileImg}
           alt="User"
           className="rounded-[40px] m-[2px] w-[80px]"
         />

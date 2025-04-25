@@ -2,6 +2,8 @@ import React from "react";
 import Line from "../Line/Line";
 import Dropdown from "../Dropdown/Dropdown";
 import Chart from "../Chart/Chart";
+import timerImg from "../../assets/timer-svgrepo-com 1.svg";
+import trendingImg from "../../assets/trending-up-svgrepo-com 1.svg";
 
 interface Props {}
 
@@ -28,11 +30,11 @@ function ActInfo(props: Props) {
         <Line height={1} />
         <div className="w-[100%] flex flex-col px-[12px] gap-[8px]">
           <div className="flex gap-[6px] ">
-            <img src="public\timer-svgrepo-com 1.svg" alt="icon" />
+            <img src={timerImg} alt="icon" />
             <h3 className="text-[12px] text-[#505050]">12 hours</h3>
           </div>
           <div className="flex gap-[6px] ">
-            <img src="public\trending-up-svgrepo-com 1.svg" alt="icon" />
+            <img src={trendingImg} alt="icon" />
             <h3 className="text-[12px] text-[#505050]">104 pushups</h3>
           </div>
         </div>

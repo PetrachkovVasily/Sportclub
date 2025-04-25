@@ -1,8 +1,6 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import PageWrapper from "../components/PageWrapper/PageWrapper";
-import ProfilePage from "../pages/ProfilePage/ProfilePage";
 import Achievements from "../components/Achievements/Achievements";
-import CompleteInfo from "../components/CompleteInfo/CompleteInfo";
 import ContentContainer from "../components/ContentContainer/ContentContainer";
 import Goals from "../components/Goals/Goals";
 import Profile from "../components/Profile/Profile";
@@ -10,6 +8,11 @@ import SwitchMenu from "../components/SwitchMenu/SwitchMenu";
 
 export const Route = createFileRoute("/profile")({
   component: RouteComponent,
+  beforeLoad: () => {
+    redirect({
+      to: "/profile/stats",
+    });
+  },
 });
 
 function RouteComponent() {

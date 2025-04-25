@@ -2,6 +2,7 @@ import React from "react";
 import NumInfo from "../NumInfo/NumInfo";
 import ViewBtn from "../ViewBtn/ViewBtn";
 import Achievement from "../Achievement/Achievement";
+import cupImg from "../../assets/cup-svgrepo-com 1.svg";
 
 interface Props {}
 
@@ -10,7 +11,7 @@ function Achievements() {
     <>
       <div className="w-[100%] flex flex-col gap-[8px] items-center">
         <div className="flex justify-center items-center rounded-[40px] w-[64px] h-[64px] border-solid border-[2px] border-[#404040]/15 ">
-          <img src="public\cup-svgrepo-com 1.svg" alt="cup" />
+          <img src={cupImg} alt="cup" />
         </div>
         <NumInfo headNum={16} info={"Achievements"} />
       </div>
