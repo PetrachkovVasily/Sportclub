@@ -2,7 +2,7 @@ import React from "react";
 
 interface Props {}
 
-function ProgressBar({ fillWidth }) {
+function ProgressBar({ fillWidth = 0 }) {
   return (
     <div className="w-full bg-[#D9D9D9] rounded-full h-[4px]">
       <div

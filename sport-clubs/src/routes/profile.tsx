@@ -16,6 +16,11 @@ export const Route = createFileRoute("/profile")({
 });
 
 function RouteComponent() {
+  const menuList = [
+    { name: "Stats", link: "/profile/stats" },
+    { name: "Goals", link: "/profile/goals" },
+  ];
+
   return (
     <PageWrapper>
       <div className="flex flex-col gap-[16px] w-[100%]">
@@ -28,7 +33,7 @@ function RouteComponent() {
       </div>
       <div className="w-[100%]">
         <div className="w-[40vw] max-w-[576px]">
-          <SwitchMenu />
+          <SwitchMenu menuList={menuList} />
           <Outlet />
         </div>
       </div>
