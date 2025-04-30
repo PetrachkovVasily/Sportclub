@@ -2,9 +2,20 @@ import React from "react";
 
 interface Props {}
 
-function Dropdown({ options }) {
+function Dropdown({
+  options,
+  isEmpty = false,
+  width = "fit-content",
+  onChange = () => "qwerty",
+}) {
   return (
-    <select>
+    <select
+      onChange={onChange}
+      style={{
+        width: width,
+      }}
+    >
+      {isEmpty ? <option style={{ display: "none" }}></option> : <></>}
       {options.map((item) => (
         <option value={item.value}>{item.name}</option>
       ))}

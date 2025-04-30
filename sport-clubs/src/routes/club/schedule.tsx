@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import Calendar from "../../components/Calendar/Calendar";
 
 export const Route = createFileRoute("/club/schedule")({
   component: RouteComponent,
@@ -6,7 +7,8 @@ export const Route = createFileRoute("/club/schedule")({
 
 function RouteComponent() {
   return (
-    <div className="lg:flex lg:h-full lg:flex-col">
+    <Calendar />
+    /*<div className="lg:flex lg:h-full lg:flex-col">
       <header className="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none">
         <h1 className="text-base font-semibold leading-6 text-gray-900">
           <time dateTime="2022-01">January 2022</time>
@@ -894,6 +896,6 @@ function RouteComponent() {
           </div>
         </div>
       </div>
-    </div>
+    </div>*/
   );
 }

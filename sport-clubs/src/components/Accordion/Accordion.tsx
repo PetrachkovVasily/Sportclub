@@ -54,6 +54,7 @@ function Accordion({}) {
                 { value: "pushups", name: "Pushups" },
                 { value: "pullups", name: "Pullups" },
               ]}
+              width={undefined}
             />
           </Activity>
           <button className="mt-[4px] bg-white rounded-2xl ">
