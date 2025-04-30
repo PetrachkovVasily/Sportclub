@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as VisibleLayoutImport } from './routes/visibleLayout'
 import { Route as ProfileImport } from './routes/profile'
+import { Route as ClubsListImport } from './routes/clubsList'
 import { Route as ClubImport } from './routes/club'
 import { Route as CalendarImport } from './routes/calendar'
 import { Route as IndexImport } from './routes/index'
@@ -36,6 +37,12 @@ const VisibleLayoutRoute = VisibleLayoutImport.update({
 const ProfileRoute = ProfileImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ClubsListRoute = ClubsListImport.update({
+  id: '/clubsList',
+  path: '/clubsList',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -128,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/club'
       fullPath: '/club'
       preLoaderRoute: typeof ClubImport
+      parentRoute: typeof rootRoute
+    }
+    '/clubsList': {
+      id: '/clubsList'
+      path: '/clubsList'
+      fullPath: '/clubsList'
+      preLoaderRoute: typeof ClubsListImport
       parentRoute: typeof rootRoute
     }
     '/profile': {
@@ -252,6 +266,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
   '/club': typeof ClubRouteWithChildren
+  '/clubsList': typeof ClubsListRoute
   '/profile': typeof ProfileRouteWithChildren
   '/visibleLayout': typeof VisibleLayoutRouteWithChildren
   '/club/achievements': typeof ClubAchievementsRoute
@@ -268,6 +283,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
   '/club': typeof ClubRouteWithChildren
+  '/clubsList': typeof ClubsListRoute
   '/profile': typeof ProfileRouteWithChildren
   '/visibleLayout': typeof VisibleLayoutRouteWithChildren
   '/club/achievements': typeof ClubAchievementsRoute
@@ -285,6 +301,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
   '/club': typeof ClubRouteWithChildren
+  '/clubsList': typeof ClubsListRoute
   '/profile': typeof ProfileRouteWithChildren
   '/visibleLayout': typeof VisibleLayoutRouteWithChildren
   '/club/achievements': typeof ClubAchievementsRoute
@@ -303,6 +320,7 @@ export interface FileRouteTypes {
     | '/'
     | '/calendar'
     | '/club'
+    | '/clubsList'
     | '/profile'
     | '/visibleLayout'
     | '/club/achievements'
@@ -318,6 +336,7 @@ export interface FileRouteTypes {
     | '/'
     | '/calendar'
     | '/club'
+    | '/clubsList'
     | '/profile'
     | '/visibleLayout'
     | '/club/achievements'
@@ -333,6 +352,7 @@ export interface FileRouteTypes {
     | '/'
     | '/calendar'
     | '/club'
+    | '/clubsList'
     | '/profile'
     | '/visibleLayout'
     | '/club/achievements'
@@ -350,6 +370,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CalendarRoute: typeof CalendarRoute
   ClubRoute: typeof ClubRouteWithChildren
+  ClubsListRoute: typeof ClubsListRoute
   ProfileRoute: typeof ProfileRouteWithChildren
   VisibleLayoutRoute: typeof VisibleLayoutRouteWithChildren
 }
@@ -358,6 +379,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CalendarRoute: CalendarRoute,
   ClubRoute: ClubRouteWithChildren,
+  ClubsListRoute: ClubsListRoute,
   ProfileRoute: ProfileRouteWithChildren,
   VisibleLayoutRoute: VisibleLayoutRouteWithChildren,
 }
@@ -375,6 +397,7 @@ export const routeTree = rootRoute
         "/",
         "/calendar",
         "/club",
+        "/clubsList",
         "/profile",
         "/visibleLayout"
       ]
@@ -393,6 +416,9 @@ export const routeTree = rootRoute
         "/club/schedule",
         "/club/workouts"
       ]
+    },
+    "/clubsList": {
+      "filePath": "clubsList.tsx"
     },
     "/profile": {
       "filePath": "profile.tsx",

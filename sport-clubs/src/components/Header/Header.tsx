@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import {
   Navbar,
   NavbarBrand,
@@ -14,7 +15,7 @@ function Header(props: Props) {
   const {} = props;
 
   return (
-    <Navbar fluid className="fixed w-[100%]">
+    <Navbar fluid className="fixed w-[100%] z-50 shadow-md">
       <NavbarBrand href="https://flowbite-react.com">
         <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Logo" />
         <span className="self-center whitespace-nowrap text-xl font-semibol">
@@ -26,13 +27,9 @@ function Header(props: Props) {
         <NavbarToggle />
       </div>
       <NavbarCollapse>
-        <NavbarLink href="#" active className="">
-          Home
-        </NavbarLink>
-        <NavbarLink href="#">About</NavbarLink>
-        <NavbarLink href="#">Services</NavbarLink>
-        <NavbarLink href="#">Pricing</NavbarLink>
-        <NavbarLink href="#">Contact</NavbarLink>
+        <Link to={"/profile/stats"}>Profile</Link>
+        <Link to={"/clubsList"}>Clubs</Link>
+        <Link to={"/calendar"}>Schedule</Link>
       </NavbarCollapse>
     </Navbar>
   );
