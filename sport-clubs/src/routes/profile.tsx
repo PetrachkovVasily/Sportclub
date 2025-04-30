@@ -23,7 +23,7 @@ function RouteComponent() {
 
   return (
     <PageWrapper>
-      <div className="flex flex-col gap-[16px] w-[100%]">
+      <div className="flex flex-col gap-[16px] w-[19vw] max-w-[280px]">
         <ContentContainer>
           <Profile />
         </ContentContainer>
@@ -31,11 +31,9 @@ function RouteComponent() {
           <Goals />
         </ContentContainer>
       </div>
-      <div className="w-[100%]">
-        <div className="w-[40vw] max-w-[576px]">
-          <SwitchMenu menuList={menuList} />
-          <Outlet />
-        </div>
+      <div className="w-[100%] max-w-[576px]">
+        <SwitchMenu menuList={menuList} />
+        <Outlet />
       </div>
       <div className="max-w-[280px] w-[100%]">
         <ContentContainer gap={22} pb={16}>

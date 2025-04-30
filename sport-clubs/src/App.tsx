@@ -14,8 +14,7 @@ function App() {
   return (
     <>
       <ThemeConfig dark={false} />
-      <RouterProvider router={router}/>
-      
+      <RouterProvider router={router} />
     </>
   );
 }
