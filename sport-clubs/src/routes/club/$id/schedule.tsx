@@ -114,7 +114,7 @@ function RouteComponent() {
 
       {/* Modal */}
       {selectedDate && (
-        <Modal>
+        <Modal closeModal={closeModal}>
           <EventList
             selectedDate={selectedDate}
             events={events}

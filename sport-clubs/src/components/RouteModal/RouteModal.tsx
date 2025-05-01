@@ -2,7 +2,7 @@ import React from "react";
 
 interface Props {}
 
-function Modal({ children, closeModal }) {
+function RouteModal({ children, closeModal }) {
   return (
     <div
       onClick={closeModal}
@@ -10,7 +10,7 @@ function Modal({ children, closeModal }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white p-4 rounded-[8px] w-[400px] max-h-[90vh] overflow-y-auto"
+        className="w-[400px] max-h-[90vh] overflow-y-auto bg-[#d9d9d9] rounded-[8px] "
       >
         {children}
       </div>
@@ -18,4 +18,4 @@ function Modal({ children, closeModal }) {
   );
 }
 
-export default Modal;
+export default RouteModal;

@@ -6,7 +6,7 @@ function Dropdown({
   options,
   isEmpty = false,
   width = "fit-content",
-  onChange = () => "qwerty",
+  onChange = () => {},
 }) {
   return (
     <select

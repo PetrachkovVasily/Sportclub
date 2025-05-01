@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as VisibleLayoutImport } from './routes/visibleLayout'
+import { Route as TrainingsImport } from './routes/trainings'
 import { Route as ClubsListImport } from './routes/clubsList'
 import { Route as CalendarImport } from './routes/calendar'
 import { Route as IndexImport } from './routes/index'
@@ -32,6 +33,12 @@ import { Route as ClubIdAchievementsImport } from './routes/club/$id/achievement
 const VisibleLayoutRoute = VisibleLayoutImport.update({
   id: '/visibleLayout',
   path: '/visibleLayout',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TrainingsRoute = TrainingsImport.update({
+  id: '/trainings',
+  path: '/trainings',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -142,6 +149,13 @@ declare module '@tanstack/react-router' {
       path: '/clubsList'
       fullPath: '/clubsList'
       preLoaderRoute: typeof ClubsListImport
+      parentRoute: typeof rootRoute
+    }
+    '/trainings': {
+      id: '/trainings'
+      path: '/trainings'
+      fullPath: '/trainings'
+      preLoaderRoute: typeof TrainingsImport
       parentRoute: typeof rootRoute
     }
     '/visibleLayout': {
@@ -282,6 +296,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
   '/clubsList': typeof ClubsListRoute
+  '/trainings': typeof TrainingsRoute
   '/visibleLayout': typeof VisibleLayoutRouteWithChildren
   '/chat/$id': typeof ChatIdRoute
   '/club/$id': typeof ClubIdRouteWithChildren
@@ -300,6 +315,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
   '/clubsList': typeof ClubsListRoute
+  '/trainings': typeof TrainingsRoute
   '/visibleLayout': typeof VisibleLayoutRouteWithChildren
   '/chat/$id': typeof ChatIdRoute
   '/club/$id': typeof ClubIdRouteWithChildren
@@ -319,6 +335,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
   '/clubsList': typeof ClubsListRoute
+  '/trainings': typeof TrainingsRoute
   '/visibleLayout': typeof VisibleLayoutRouteWithChildren
   '/chat/$id': typeof ChatIdRoute
   '/club/$id': typeof ClubIdRouteWithChildren
@@ -339,6 +356,7 @@ export interface FileRouteTypes {
     | '/'
     | '/calendar'
     | '/clubsList'
+    | '/trainings'
     | '/visibleLayout'
     | '/chat/$id'
     | '/club/$id'
@@ -356,6 +374,7 @@ export interface FileRouteTypes {
     | '/'
     | '/calendar'
     | '/clubsList'
+    | '/trainings'
     | '/visibleLayout'
     | '/chat/$id'
     | '/club/$id'
@@ -373,6 +392,7 @@ export interface FileRouteTypes {
     | '/'
     | '/calendar'
     | '/clubsList'
+    | '/trainings'
     | '/visibleLayout'
     | '/chat/$id'
     | '/club/$id'
@@ -392,6 +412,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CalendarRoute: typeof CalendarRoute
   ClubsListRoute: typeof ClubsListRoute
+  TrainingsRoute: typeof TrainingsRoute
   VisibleLayoutRoute: typeof VisibleLayoutRouteWithChildren
   ChatIdRoute: typeof ChatIdRoute
   ClubIdRoute: typeof ClubIdRouteWithChildren
@@ -402,6 +423,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CalendarRoute: CalendarRoute,
   ClubsListRoute: ClubsListRoute,
+  TrainingsRoute: TrainingsRoute,
   VisibleLayoutRoute: VisibleLayoutRouteWithChildren,
   ChatIdRoute: ChatIdRoute,
   ClubIdRoute: ClubIdRouteWithChildren,
@@ -421,6 +443,7 @@ export const routeTree = rootRoute
         "/",
         "/calendar",
         "/clubsList",
+        "/trainings",
         "/visibleLayout",
         "/chat/$id",
         "/club/$id",
@@ -435,6 +458,9 @@ export const routeTree = rootRoute
     },
     "/clubsList": {
       "filePath": "clubsList.tsx"
+    },
+    "/trainings": {
+      "filePath": "trainings.tsx"
     },
     "/visibleLayout": {
       "filePath": "visibleLayout.tsx",

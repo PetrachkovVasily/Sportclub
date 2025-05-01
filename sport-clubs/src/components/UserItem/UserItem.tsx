@@ -1,0 +1,43 @@
+import React from "react";
+import profileImg from "../../assets/profileImg.png";
+import menuImg from "../../assets/menu-vertical-svgrepo-com 1.svg";
+
+interface Props {}
+
+function UserItem({ requesting = false }) {
+  return (
+    <div className="flex gap-[12px] w-[100%] p-[6px] px-[4px] items-center justify-between ">
+      <div className="flex gap-[8px] w-[100%] items-center">
+        <img
+          src={profileImg}
+          alt="AchImg"
+          className="w-[40px] h-[40px] rounded-[24px]"
+        />
+        <div className="w-[100%] flex justify-between text-ellipsis overflow-hidden">
+          <div className="flex flex-col">
+            <h2 className="font-bold text-[14px] text-nowrap text-[#F2B749] text-ellipsis overflow-hidden">
+              {"User name"}
+            </h2>
+            <span className="text-[12px] text-[#505050] text-ellipsis overflow-hidden w-full max-w-[440px] text-justify">
+              {"admin"}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-[8px] font-semibold text-[#505050] text-[12px]">
+            {requesting ? (
+              <button className="px-[4px] h-full">
+                <img src={menuImg} alt="" />
+              </button>
+            ) : (
+              <button className="w-[96px] px-[8px] py-[4px] rounded-[4px] font-bold bg-[#F2B749] text-white text-[14px]">
+                Add
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default UserItem;

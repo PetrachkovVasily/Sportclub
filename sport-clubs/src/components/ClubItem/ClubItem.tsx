@@ -44,8 +44,8 @@ function ClubItem({ isMember = false }) {
               </button>
             </Link>
 
-            <button className="px-[4px] h-full">
-              <img src={menuImg} alt="" />
+            <button className="px-[4px] w-[29px] h-[29px]">
+              <img className="w-[29px] h-[29px]" src={menuImg} alt="" />
             </button>
           </>
         ) : (

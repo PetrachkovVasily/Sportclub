@@ -28,8 +28,9 @@ function Header(props: Props) {
       </div>
       <NavbarCollapse>
         <Link to={"/profile/123/stats"}>Profile</Link>
-        <Link to={"/clubsList"}>Clubs</Link>
+        <Link to={"/trainings"}>Trainings</Link>
         <Link to={"/calendar"}>Schedule</Link>
+        <Link to={"/clubsList"}>Clubs</Link>
       </NavbarCollapse>
     </Navbar>
   );
