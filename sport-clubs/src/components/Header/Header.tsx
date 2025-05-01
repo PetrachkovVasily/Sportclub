@@ -27,7 +27,7 @@ function Header(props: Props) {
         <NavbarToggle />
       </div>
       <NavbarCollapse>
-        <Link to={"/profile/stats"}>Profile</Link>
+        <Link to={"/profile/123/stats"}>Profile</Link>
         <Link to={"/clubsList"}>Clubs</Link>
         <Link to={"/calendar"}>Schedule</Link>
       </NavbarCollapse>

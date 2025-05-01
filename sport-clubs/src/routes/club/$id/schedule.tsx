@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Calendar from "../../components/Calendar/Calendar";
-import Modal from "../../components/Modal/Modal";
+import Calendar from "../../../components/Calendar/Calendar";
+import Modal from "../../../components/Modal/Modal";
 import dayjs from "dayjs";
 import { useState } from "react";
-import Dropdown from "../../components/Dropdown/Dropdown";
-import EventList from "../../components/EventList/EventList";
+import Dropdown from "../../../components/Dropdown/Dropdown";
+import EventList from "../../../components/EventList/EventList";
 
-export const Route = createFileRoute("/club/schedule")({
+export const Route = createFileRoute("/club/$id/schedule")({
   component: RouteComponent,
 });
 

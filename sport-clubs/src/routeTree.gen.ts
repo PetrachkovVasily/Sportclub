@@ -12,19 +12,20 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as VisibleLayoutImport } from './routes/visibleLayout'
-import { Route as ProfileImport } from './routes/profile'
 import { Route as ClubsListImport } from './routes/clubsList'
-import { Route as ClubImport } from './routes/club'
 import { Route as CalendarImport } from './routes/calendar'
 import { Route as IndexImport } from './routes/index'
 import { Route as VisibleLayoutFooImport } from './routes/visibleLayout/foo'
 import { Route as VisibleLayoutBarImport } from './routes/visibleLayout/bar'
-import { Route as ProfileStatsImport } from './routes/profile/stats'
-import { Route as ProfileGoalsImport } from './routes/profile/goals'
-import { Route as ClubWorkoutsImport } from './routes/club/workouts'
-import { Route as ClubScheduleImport } from './routes/club/schedule'
-import { Route as ClubRatingImport } from './routes/club/rating'
-import { Route as ClubAchievementsImport } from './routes/club/achievements'
+import { Route as ProfileIdImport } from './routes/profile/$id'
+import { Route as ClubIdImport } from './routes/club/$id'
+import { Route as ChatIdImport } from './routes/chat/$id'
+import { Route as ProfileIdStatsImport } from './routes/profile/$id/stats'
+import { Route as ProfileIdGoalsImport } from './routes/profile/$id/goals'
+import { Route as ClubIdWorkoutsImport } from './routes/club/$id/workouts'
+import { Route as ClubIdScheduleImport } from './routes/club/$id/schedule'
+import { Route as ClubIdRatingImport } from './routes/club/$id/rating'
+import { Route as ClubIdAchievementsImport } from './routes/club/$id/achievements'
 
 // Create/Update Routes
 
@@ -34,21 +35,9 @@ const VisibleLayoutRoute = VisibleLayoutImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProfileRoute = ProfileImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const ClubsListRoute = ClubsListImport.update({
   id: '/clubsList',
   path: '/clubsList',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ClubRoute = ClubImport.update({
-  id: '/club',
-  path: '/club',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -76,40 +65,58 @@ const VisibleLayoutBarRoute = VisibleLayoutBarImport.update({
   getParentRoute: () => VisibleLayoutRoute,
 } as any)
 
-const ProfileStatsRoute = ProfileStatsImport.update({
+const ProfileIdRoute = ProfileIdImport.update({
+  id: '/profile/$id',
+  path: '/profile/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ClubIdRoute = ClubIdImport.update({
+  id: '/club/$id',
+  path: '/club/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ChatIdRoute = ChatIdImport.update({
+  id: '/chat/$id',
+  path: '/chat/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProfileIdStatsRoute = ProfileIdStatsImport.update({
   id: '/stats',
   path: '/stats',
-  getParentRoute: () => ProfileRoute,
+  getParentRoute: () => ProfileIdRoute,
 } as any)
 
-const ProfileGoalsRoute = ProfileGoalsImport.update({
+const ProfileIdGoalsRoute = ProfileIdGoalsImport.update({
   id: '/goals',
   path: '/goals',
-  getParentRoute: () => ProfileRoute,
+  getParentRoute: () => ProfileIdRoute,
 } as any)
 
-const ClubWorkoutsRoute = ClubWorkoutsImport.update({
+const ClubIdWorkoutsRoute = ClubIdWorkoutsImport.update({
   id: '/workouts',
   path: '/workouts',
-  getParentRoute: () => ClubRoute,
+  getParentRoute: () => ClubIdRoute,
 } as any)
 
-const ClubScheduleRoute = ClubScheduleImport.update({
+const ClubIdScheduleRoute = ClubIdScheduleImport.update({
   id: '/schedule',
   path: '/schedule',
-  getParentRoute: () => ClubRoute,
+  getParentRoute: () => ClubIdRoute,
 } as any)
 
-const ClubRatingRoute = ClubRatingImport.update({
+const ClubIdRatingRoute = ClubIdRatingImport.update({
   id: '/rating',
   path: '/rating',
-  getParentRoute: () => ClubRoute,
+  getParentRoute: () => ClubIdRoute,
 } as any)
 
-const ClubAchievementsRoute = ClubAchievementsImport.update({
+const ClubIdAchievementsRoute = ClubIdAchievementsImport.update({
   id: '/achievements',
   path: '/achievements',
-  getParentRoute: () => ClubRoute,
+  getParentRoute: () => ClubIdRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -130,25 +137,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CalendarImport
       parentRoute: typeof rootRoute
     }
-    '/club': {
-      id: '/club'
-      path: '/club'
-      fullPath: '/club'
-      preLoaderRoute: typeof ClubImport
-      parentRoute: typeof rootRoute
-    }
     '/clubsList': {
       id: '/clubsList'
       path: '/clubsList'
       fullPath: '/clubsList'
       preLoaderRoute: typeof ClubsListImport
-      parentRoute: typeof rootRoute
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileImport
       parentRoute: typeof rootRoute
     }
     '/visibleLayout': {
@@ -158,47 +151,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VisibleLayoutImport
       parentRoute: typeof rootRoute
     }
-    '/club/achievements': {
-      id: '/club/achievements'
-      path: '/achievements'
-      fullPath: '/club/achievements'
-      preLoaderRoute: typeof ClubAchievementsImport
-      parentRoute: typeof ClubImport
+    '/chat/$id': {
+      id: '/chat/$id'
+      path: '/chat/$id'
+      fullPath: '/chat/$id'
+      preLoaderRoute: typeof ChatIdImport
+      parentRoute: typeof rootRoute
     }
-    '/club/rating': {
-      id: '/club/rating'
-      path: '/rating'
-      fullPath: '/club/rating'
-      preLoaderRoute: typeof ClubRatingImport
-      parentRoute: typeof ClubImport
+    '/club/$id': {
+      id: '/club/$id'
+      path: '/club/$id'
+      fullPath: '/club/$id'
+      preLoaderRoute: typeof ClubIdImport
+      parentRoute: typeof rootRoute
     }
-    '/club/schedule': {
-      id: '/club/schedule'
-      path: '/schedule'
-      fullPath: '/club/schedule'
-      preLoaderRoute: typeof ClubScheduleImport
-      parentRoute: typeof ClubImport
-    }
-    '/club/workouts': {
-      id: '/club/workouts'
-      path: '/workouts'
-      fullPath: '/club/workouts'
-      preLoaderRoute: typeof ClubWorkoutsImport
-      parentRoute: typeof ClubImport
-    }
-    '/profile/goals': {
-      id: '/profile/goals'
-      path: '/goals'
-      fullPath: '/profile/goals'
-      preLoaderRoute: typeof ProfileGoalsImport
-      parentRoute: typeof ProfileImport
-    }
-    '/profile/stats': {
-      id: '/profile/stats'
-      path: '/stats'
-      fullPath: '/profile/stats'
-      preLoaderRoute: typeof ProfileStatsImport
-      parentRoute: typeof ProfileImport
+    '/profile/$id': {
+      id: '/profile/$id'
+      path: '/profile/$id'
+      fullPath: '/profile/$id'
+      preLoaderRoute: typeof ProfileIdImport
+      parentRoute: typeof rootRoute
     }
     '/visibleLayout/bar': {
       id: '/visibleLayout/bar'
@@ -214,39 +186,52 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VisibleLayoutFooImport
       parentRoute: typeof VisibleLayoutImport
     }
+    '/club/$id/achievements': {
+      id: '/club/$id/achievements'
+      path: '/achievements'
+      fullPath: '/club/$id/achievements'
+      preLoaderRoute: typeof ClubIdAchievementsImport
+      parentRoute: typeof ClubIdImport
+    }
+    '/club/$id/rating': {
+      id: '/club/$id/rating'
+      path: '/rating'
+      fullPath: '/club/$id/rating'
+      preLoaderRoute: typeof ClubIdRatingImport
+      parentRoute: typeof ClubIdImport
+    }
+    '/club/$id/schedule': {
+      id: '/club/$id/schedule'
+      path: '/schedule'
+      fullPath: '/club/$id/schedule'
+      preLoaderRoute: typeof ClubIdScheduleImport
+      parentRoute: typeof ClubIdImport
+    }
+    '/club/$id/workouts': {
+      id: '/club/$id/workouts'
+      path: '/workouts'
+      fullPath: '/club/$id/workouts'
+      preLoaderRoute: typeof ClubIdWorkoutsImport
+      parentRoute: typeof ClubIdImport
+    }
+    '/profile/$id/goals': {
+      id: '/profile/$id/goals'
+      path: '/goals'
+      fullPath: '/profile/$id/goals'
+      preLoaderRoute: typeof ProfileIdGoalsImport
+      parentRoute: typeof ProfileIdImport
+    }
+    '/profile/$id/stats': {
+      id: '/profile/$id/stats'
+      path: '/stats'
+      fullPath: '/profile/$id/stats'
+      preLoaderRoute: typeof ProfileIdStatsImport
+      parentRoute: typeof ProfileIdImport
+    }
   }
 }
 
 // Create and export the route tree
-
-interface ClubRouteChildren {
-  ClubAchievementsRoute: typeof ClubAchievementsRoute
-  ClubRatingRoute: typeof ClubRatingRoute
-  ClubScheduleRoute: typeof ClubScheduleRoute
-  ClubWorkoutsRoute: typeof ClubWorkoutsRoute
-}
-
-const ClubRouteChildren: ClubRouteChildren = {
-  ClubAchievementsRoute: ClubAchievementsRoute,
-  ClubRatingRoute: ClubRatingRoute,
-  ClubScheduleRoute: ClubScheduleRoute,
-  ClubWorkoutsRoute: ClubWorkoutsRoute,
-}
-
-const ClubRouteWithChildren = ClubRoute._addFileChildren(ClubRouteChildren)
-
-interface ProfileRouteChildren {
-  ProfileGoalsRoute: typeof ProfileGoalsRoute
-  ProfileStatsRoute: typeof ProfileStatsRoute
-}
-
-const ProfileRouteChildren: ProfileRouteChildren = {
-  ProfileGoalsRoute: ProfileGoalsRoute,
-  ProfileStatsRoute: ProfileStatsRoute,
-}
-
-const ProfileRouteWithChildren =
-  ProfileRoute._addFileChildren(ProfileRouteChildren)
 
 interface VisibleLayoutRouteChildren {
   VisibleLayoutBarRoute: typeof VisibleLayoutBarRoute
@@ -262,56 +247,90 @@ const VisibleLayoutRouteWithChildren = VisibleLayoutRoute._addFileChildren(
   VisibleLayoutRouteChildren,
 )
 
+interface ClubIdRouteChildren {
+  ClubIdAchievementsRoute: typeof ClubIdAchievementsRoute
+  ClubIdRatingRoute: typeof ClubIdRatingRoute
+  ClubIdScheduleRoute: typeof ClubIdScheduleRoute
+  ClubIdWorkoutsRoute: typeof ClubIdWorkoutsRoute
+}
+
+const ClubIdRouteChildren: ClubIdRouteChildren = {
+  ClubIdAchievementsRoute: ClubIdAchievementsRoute,
+  ClubIdRatingRoute: ClubIdRatingRoute,
+  ClubIdScheduleRoute: ClubIdScheduleRoute,
+  ClubIdWorkoutsRoute: ClubIdWorkoutsRoute,
+}
+
+const ClubIdRouteWithChildren =
+  ClubIdRoute._addFileChildren(ClubIdRouteChildren)
+
+interface ProfileIdRouteChildren {
+  ProfileIdGoalsRoute: typeof ProfileIdGoalsRoute
+  ProfileIdStatsRoute: typeof ProfileIdStatsRoute
+}
+
+const ProfileIdRouteChildren: ProfileIdRouteChildren = {
+  ProfileIdGoalsRoute: ProfileIdGoalsRoute,
+  ProfileIdStatsRoute: ProfileIdStatsRoute,
+}
+
+const ProfileIdRouteWithChildren = ProfileIdRoute._addFileChildren(
+  ProfileIdRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
-  '/club': typeof ClubRouteWithChildren
   '/clubsList': typeof ClubsListRoute
-  '/profile': typeof ProfileRouteWithChildren
   '/visibleLayout': typeof VisibleLayoutRouteWithChildren
-  '/club/achievements': typeof ClubAchievementsRoute
-  '/club/rating': typeof ClubRatingRoute
-  '/club/schedule': typeof ClubScheduleRoute
-  '/club/workouts': typeof ClubWorkoutsRoute
-  '/profile/goals': typeof ProfileGoalsRoute
-  '/profile/stats': typeof ProfileStatsRoute
+  '/chat/$id': typeof ChatIdRoute
+  '/club/$id': typeof ClubIdRouteWithChildren
+  '/profile/$id': typeof ProfileIdRouteWithChildren
   '/visibleLayout/bar': typeof VisibleLayoutBarRoute
   '/visibleLayout/foo': typeof VisibleLayoutFooRoute
+  '/club/$id/achievements': typeof ClubIdAchievementsRoute
+  '/club/$id/rating': typeof ClubIdRatingRoute
+  '/club/$id/schedule': typeof ClubIdScheduleRoute
+  '/club/$id/workouts': typeof ClubIdWorkoutsRoute
+  '/profile/$id/goals': typeof ProfileIdGoalsRoute
+  '/profile/$id/stats': typeof ProfileIdStatsRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
-  '/club': typeof ClubRouteWithChildren
   '/clubsList': typeof ClubsListRoute
-  '/profile': typeof ProfileRouteWithChildren
   '/visibleLayout': typeof VisibleLayoutRouteWithChildren
-  '/club/achievements': typeof ClubAchievementsRoute
-  '/club/rating': typeof ClubRatingRoute
-  '/club/schedule': typeof ClubScheduleRoute
-  '/club/workouts': typeof ClubWorkoutsRoute
-  '/profile/goals': typeof ProfileGoalsRoute
-  '/profile/stats': typeof ProfileStatsRoute
+  '/chat/$id': typeof ChatIdRoute
+  '/club/$id': typeof ClubIdRouteWithChildren
+  '/profile/$id': typeof ProfileIdRouteWithChildren
   '/visibleLayout/bar': typeof VisibleLayoutBarRoute
   '/visibleLayout/foo': typeof VisibleLayoutFooRoute
+  '/club/$id/achievements': typeof ClubIdAchievementsRoute
+  '/club/$id/rating': typeof ClubIdRatingRoute
+  '/club/$id/schedule': typeof ClubIdScheduleRoute
+  '/club/$id/workouts': typeof ClubIdWorkoutsRoute
+  '/profile/$id/goals': typeof ProfileIdGoalsRoute
+  '/profile/$id/stats': typeof ProfileIdStatsRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
-  '/club': typeof ClubRouteWithChildren
   '/clubsList': typeof ClubsListRoute
-  '/profile': typeof ProfileRouteWithChildren
   '/visibleLayout': typeof VisibleLayoutRouteWithChildren
-  '/club/achievements': typeof ClubAchievementsRoute
-  '/club/rating': typeof ClubRatingRoute
-  '/club/schedule': typeof ClubScheduleRoute
-  '/club/workouts': typeof ClubWorkoutsRoute
-  '/profile/goals': typeof ProfileGoalsRoute
-  '/profile/stats': typeof ProfileStatsRoute
+  '/chat/$id': typeof ChatIdRoute
+  '/club/$id': typeof ClubIdRouteWithChildren
+  '/profile/$id': typeof ProfileIdRouteWithChildren
   '/visibleLayout/bar': typeof VisibleLayoutBarRoute
   '/visibleLayout/foo': typeof VisibleLayoutFooRoute
+  '/club/$id/achievements': typeof ClubIdAchievementsRoute
+  '/club/$id/rating': typeof ClubIdRatingRoute
+  '/club/$id/schedule': typeof ClubIdScheduleRoute
+  '/club/$id/workouts': typeof ClubIdWorkoutsRoute
+  '/profile/$id/goals': typeof ProfileIdGoalsRoute
+  '/profile/$id/stats': typeof ProfileIdStatsRoute
 }
 
 export interface FileRouteTypes {
@@ -319,69 +338,74 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/calendar'
-    | '/club'
     | '/clubsList'
-    | '/profile'
     | '/visibleLayout'
-    | '/club/achievements'
-    | '/club/rating'
-    | '/club/schedule'
-    | '/club/workouts'
-    | '/profile/goals'
-    | '/profile/stats'
+    | '/chat/$id'
+    | '/club/$id'
+    | '/profile/$id'
     | '/visibleLayout/bar'
     | '/visibleLayout/foo'
+    | '/club/$id/achievements'
+    | '/club/$id/rating'
+    | '/club/$id/schedule'
+    | '/club/$id/workouts'
+    | '/profile/$id/goals'
+    | '/profile/$id/stats'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/calendar'
-    | '/club'
     | '/clubsList'
-    | '/profile'
     | '/visibleLayout'
-    | '/club/achievements'
-    | '/club/rating'
-    | '/club/schedule'
-    | '/club/workouts'
-    | '/profile/goals'
-    | '/profile/stats'
+    | '/chat/$id'
+    | '/club/$id'
+    | '/profile/$id'
     | '/visibleLayout/bar'
     | '/visibleLayout/foo'
+    | '/club/$id/achievements'
+    | '/club/$id/rating'
+    | '/club/$id/schedule'
+    | '/club/$id/workouts'
+    | '/profile/$id/goals'
+    | '/profile/$id/stats'
   id:
     | '__root__'
     | '/'
     | '/calendar'
-    | '/club'
     | '/clubsList'
-    | '/profile'
     | '/visibleLayout'
-    | '/club/achievements'
-    | '/club/rating'
-    | '/club/schedule'
-    | '/club/workouts'
-    | '/profile/goals'
-    | '/profile/stats'
+    | '/chat/$id'
+    | '/club/$id'
+    | '/profile/$id'
     | '/visibleLayout/bar'
     | '/visibleLayout/foo'
+    | '/club/$id/achievements'
+    | '/club/$id/rating'
+    | '/club/$id/schedule'
+    | '/club/$id/workouts'
+    | '/profile/$id/goals'
+    | '/profile/$id/stats'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CalendarRoute: typeof CalendarRoute
-  ClubRoute: typeof ClubRouteWithChildren
   ClubsListRoute: typeof ClubsListRoute
-  ProfileRoute: typeof ProfileRouteWithChildren
   VisibleLayoutRoute: typeof VisibleLayoutRouteWithChildren
+  ChatIdRoute: typeof ChatIdRoute
+  ClubIdRoute: typeof ClubIdRouteWithChildren
+  ProfileIdRoute: typeof ProfileIdRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CalendarRoute: CalendarRoute,
-  ClubRoute: ClubRouteWithChildren,
   ClubsListRoute: ClubsListRoute,
-  ProfileRoute: ProfileRouteWithChildren,
   VisibleLayoutRoute: VisibleLayoutRouteWithChildren,
+  ChatIdRoute: ChatIdRoute,
+  ClubIdRoute: ClubIdRouteWithChildren,
+  ProfileIdRoute: ProfileIdRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -396,10 +420,11 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/calendar",
-        "/club",
         "/clubsList",
-        "/profile",
-        "/visibleLayout"
+        "/visibleLayout",
+        "/chat/$id",
+        "/club/$id",
+        "/profile/$id"
       ]
     },
     "/": {
@@ -408,24 +433,8 @@ export const routeTree = rootRoute
     "/calendar": {
       "filePath": "calendar.tsx"
     },
-    "/club": {
-      "filePath": "club.tsx",
-      "children": [
-        "/club/achievements",
-        "/club/rating",
-        "/club/schedule",
-        "/club/workouts"
-      ]
-    },
     "/clubsList": {
       "filePath": "clubsList.tsx"
-    },
-    "/profile": {
-      "filePath": "profile.tsx",
-      "children": [
-        "/profile/goals",
-        "/profile/stats"
-      ]
     },
     "/visibleLayout": {
       "filePath": "visibleLayout.tsx",
@@ -434,29 +443,24 @@ export const routeTree = rootRoute
         "/visibleLayout/foo"
       ]
     },
-    "/club/achievements": {
-      "filePath": "club/achievements.tsx",
-      "parent": "/club"
+    "/chat/$id": {
+      "filePath": "chat/$id.tsx"
     },
-    "/club/rating": {
-      "filePath": "club/rating.tsx",
-      "parent": "/club"
+    "/club/$id": {
+      "filePath": "club/$id.tsx",
+      "children": [
+        "/club/$id/achievements",
+        "/club/$id/rating",
+        "/club/$id/schedule",
+        "/club/$id/workouts"
+      ]
     },
-    "/club/schedule": {
-      "filePath": "club/schedule.tsx",
-      "parent": "/club"
-    },
-    "/club/workouts": {
-      "filePath": "club/workouts.tsx",
-      "parent": "/club"
-    },
-    "/profile/goals": {
-      "filePath": "profile/goals.tsx",
-      "parent": "/profile"
-    },
-    "/profile/stats": {
-      "filePath": "profile/stats.tsx",
-      "parent": "/profile"
+    "/profile/$id": {
+      "filePath": "profile/$id.tsx",
+      "children": [
+        "/profile/$id/goals",
+        "/profile/$id/stats"
+      ]
     },
     "/visibleLayout/bar": {
       "filePath": "visibleLayout/bar.tsx",
@@ -465,6 +469,30 @@ export const routeTree = rootRoute
     "/visibleLayout/foo": {
       "filePath": "visibleLayout/foo.tsx",
       "parent": "/visibleLayout"
+    },
+    "/club/$id/achievements": {
+      "filePath": "club/$id/achievements.tsx",
+      "parent": "/club/$id"
+    },
+    "/club/$id/rating": {
+      "filePath": "club/$id/rating.tsx",
+      "parent": "/club/$id"
+    },
+    "/club/$id/schedule": {
+      "filePath": "club/$id/schedule.tsx",
+      "parent": "/club/$id"
+    },
+    "/club/$id/workouts": {
+      "filePath": "club/$id/workouts.tsx",
+      "parent": "/club/$id"
+    },
+    "/profile/$id/goals": {
+      "filePath": "profile/$id/goals.tsx",
+      "parent": "/profile/$id"
+    },
+    "/profile/$id/stats": {
+      "filePath": "profile/$id/stats.tsx",
+      "parent": "/profile/$id"
     }
   }
 }

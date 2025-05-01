@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Accordion from "../../components/Accordion/Accordion";
-import addBtn from "../../assets/add-svgrepo-com 1.svg";
-import deleteBtn from "../../assets/delete-1-svgrepo-com 1.svg";
+import Accordion from "../../../components/Accordion/Accordion";
+import addBtn from "../../../assets/add-svgrepo-com 1.svg";
+import deleteBtn from "../../../assets/delete-1-svgrepo-com 1.svg";
 
-export const Route = createFileRoute("/club/workouts")({
+export const Route = createFileRoute("/club/$id/workouts")({
   component: RouteComponent,
 });
 

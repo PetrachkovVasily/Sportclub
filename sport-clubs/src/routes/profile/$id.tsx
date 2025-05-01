@@ -1,12 +1,12 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import PageWrapper from "../components/PageWrapper/PageWrapper";
-import Achievements from "../components/Achievements/Achievements";
-import ContentContainer from "../components/ContentContainer/ContentContainer";
-import Goals from "../components/Goals/Goals";
-import Profile from "../components/Profile/Profile";
-import SwitchMenu from "../components/SwitchMenu/SwitchMenu";
+import PageWrapper from "../../components/PageWrapper/PageWrapper";
+import ContentContainer from "../../components/ContentContainer/ContentContainer";
+import Profile from "../../components/Profile/Profile";
+import Goals from "../../components/Goals/Goals";
+import SwitchMenu from "../../components/SwitchMenu/SwitchMenu";
+import Achievements from "../../components/Achievements/Achievements";
 
-export const Route = createFileRoute("/profile")({
+export const Route = createFileRoute("/profile/$id")({
   component: RouteComponent,
   beforeLoad: () => {
     redirect({
@@ -17,8 +17,8 @@ export const Route = createFileRoute("/profile")({
 
 function RouteComponent() {
   const menuList = [
-    { name: "Stats", link: "/profile/stats" },
-    { name: "Goals", link: "/profile/goals" },
+    { name: "Stats", link: "/profile/123/stats" },
+    { name: "Goals", link: "/profile/123/goals" },
   ];
 
   return (

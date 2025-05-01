@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import ProgressBar from "../../components/ProgressBar/ProgressBar";
-import Achievement from "../../components/Achievement/Achievement";
-import Line from "../../components/Line/Line";
-import ClubAch from "../../components/ClubAch/ClubAch";
+import ProgressBar from "../../../components/ProgressBar/ProgressBar";
+import Achievement from "../../../components/Achievement/Achievement";
+import Line from "../../../components/Line/Line";
+import ClubAch from "../../../components/ClubAch/ClubAch";
 
-export const Route = createFileRoute("/club/achievements")({
+export const Route = createFileRoute("/club/$id/achievements")({
   component: RouteComponent,
 });
 

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Goals from "../../components/Goals/Goals";
+import Goals from "../../../components/Goals/Goals";
 
-export const Route = createFileRoute("/profile/goals")({
+export const Route = createFileRoute("/profile/$id/goals")({
   component: RouteComponent,
 });
 

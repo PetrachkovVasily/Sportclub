@@ -1,24 +1,24 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import PageWrapper from "../components/PageWrapper/PageWrapper";
-import ContentContainer from "../components/ContentContainer/ContentContainer";
-import Achievements from "../components/Achievements/Achievements";
-import InfoNote from "../components/InfoNote/InfoNote";
-import locationImg from "../assets/location-point-svgrepo-com 1.svg";
-import workImg from "../assets/flight-takeoff-svgrepo-com 1.svg";
-import membersImg from "../assets/user-group-svgrepo-com 1.svg";
-import ClubHead from "../components/ClubHead/ClubHead";
-import SwitchMenu from "../components/SwitchMenu/SwitchMenu";
+import PageWrapper from "../../components/PageWrapper/PageWrapper";
+import ContentContainer from "../../components/ContentContainer/ContentContainer";
+import Achievements from "../../components/Achievements/Achievements";
+import InfoNote from "../../components/InfoNote/InfoNote";
+import locationImg from "../../assets/location-point-svgrepo-com 1.svg";
+import workImg from "../../assets/flight-takeoff-svgrepo-com 1.svg";
+import membersImg from "../../assets/user-group-svgrepo-com 1.svg";
+import ClubHead from "../../components/ClubHead/ClubHead";
+import SwitchMenu from "../../components/SwitchMenu/SwitchMenu";
 
-export const Route = createFileRoute("/club")({
+export const Route = createFileRoute("/club/$id")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const menuList = [
-    { name: "Rating", link: "/club/rating" },
-    { name: "Schedule", link: "/club/schedule" },
-    { name: "Workouts", link: "/club/workouts" },
-    { name: "Achievements", link: "/club/achievements" },
+    { name: "Rating", link: "/club/123/rating" },
+    { name: "Schedule", link: "/club/123/schedule" },
+    { name: "Workouts", link: "/club/123/workouts" },
+    { name: "Achievements", link: "/club/123/achievements" },
   ];
   return (
     <PageWrapper>

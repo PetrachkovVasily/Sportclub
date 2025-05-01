@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import CompleteInfo from "../../components/CompleteInfo/CompleteInfo";
+import CompleteInfo from "../../../components/CompleteInfo/CompleteInfo";
 
-export const Route = createFileRoute("/profile/stats")({
+export const Route = createFileRoute("/profile/$id/stats")({
   component: RouteComponent,
 });
 

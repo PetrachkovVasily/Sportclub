@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "flowbite-react";
 
-export const Route = createFileRoute("/club/rating")({
+export const Route = createFileRoute("/club/$id/rating")({
   component: RouteComponent,
 });
 
