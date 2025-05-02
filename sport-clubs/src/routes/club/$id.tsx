@@ -8,6 +8,8 @@ import workImg from "../../assets/flight-takeoff-svgrepo-com 1.svg";
 import membersImg from "../../assets/user-group-svgrepo-com 1.svg";
 import ClubHead from "../../components/ClubHead/ClubHead";
 import SwitchMenu from "../../components/SwitchMenu/SwitchMenu";
+import Modal from "../../components/Modal/Modal";
+import { useState } from "react";
 
 export const Route = createFileRoute("/club/$id")({
   component: RouteComponent,
@@ -20,6 +22,7 @@ function RouteComponent() {
     { name: "Workouts", link: "/club/123/workouts" },
     { name: "Achievements", link: "/club/123/achievements" },
   ];
+
   return (
     <PageWrapper>
       <article className="max-w-[880px] w-[100%] flex flex-col gap-[24px] ">
@@ -40,7 +43,11 @@ function RouteComponent() {
           <InfoNote info="members" src={membersImg} num={16} />
         </section>
         <ContentContainer gap={22} pb={16}>
-          <Achievements isClub={true} userAchAmount={8} clubAchAmount={16} />
+          <Achievements
+            isClub={true}
+            userAchAmount={8}
+            clubAchAmount={16}
+          />
         </ContentContainer>
       </article>
     </PageWrapper>

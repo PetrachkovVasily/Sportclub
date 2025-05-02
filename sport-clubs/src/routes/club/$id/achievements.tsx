@@ -3,12 +3,26 @@ import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import Achievement from "../../../components/Achievement/Achievement";
 import Line from "../../../components/Line/Line";
 import ClubAch from "../../../components/ClubAch/ClubAch";
+import addBtn from "../../../assets/add-svgrepo-com 1.svg";
+import { useState } from "react";
+import Modal from "../../../components/Modal/Modal";
+import AchForm from "../../../components/AchForm/AchForm";
 
 export const Route = createFileRoute("/club/$id/achievements")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const [openCreateAch, setOpenCreateAch] = useState(false);
+
+  const closeModal = () => {
+    setOpenCreateAch(false);
+  };
+
+  const openModal = () => {
+    setOpenCreateAch(true);
+  };
+
   return (
     <article className="w-[100%] flex flex-col gap-[12px]">
       <h1 className="text-[22px] font-normal text-[#505050] ">Achiviements:</h1>
@@ -35,27 +49,21 @@ function RouteComponent() {
             date={"29.04.2025"}
             progress={100}
           />
-          <ClubAch
-            name={"Qwertyuio"}
-            info={"qwertyu fggg"}
-            date={"29.04.2025"}
-            progress={60}
-          />
-          <ClubAch
-            name={"Qwertyuio"}
-            info={"qwertyu fggg"}
-            date={"29.04.2025"}
-            progress={50}
-          />
-          <ClubAch
-            name={"Qwertyuio"}
-            info={"qwertyu fggg"}
-            date={"29.04.2025"}
-            progress={30}
-          />
         </div>
-        <div className="w-[100%] flex flex-col gap-[6px] px-[12px] "></div>
+        <div className="w-full flex justify-center mt-[4px]">
+          <button
+            onClick={openModal}
+            className="mt-[4px] bg-white rounded-2xl border-[2px] border-[#505050]/18 "
+          >
+            <img src={addBtn} alt="" />
+          </button>
+        </div>
       </div>
+      {openCreateAch && (
+        <Modal closeModal={closeModal}>
+          <AchForm />
+        </Modal>
+      )}
     </article>
   );
 }
