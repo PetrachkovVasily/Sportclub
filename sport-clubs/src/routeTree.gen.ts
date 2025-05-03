@@ -15,6 +15,7 @@ import { Route as VisibleLayoutImport } from './routes/visibleLayout'
 import { Route as TrainingsImport } from './routes/trainings'
 import { Route as ClubsListImport } from './routes/clubsList'
 import { Route as CalendarImport } from './routes/calendar'
+import { Route as AuthImport } from './routes/auth'
 import { Route as IndexImport } from './routes/index'
 import { Route as VisibleLayoutFooImport } from './routes/visibleLayout/foo'
 import { Route as VisibleLayoutBarImport } from './routes/visibleLayout/bar'
@@ -51,6 +52,12 @@ const ClubsListRoute = ClubsListImport.update({
 const CalendarRoute = CalendarImport.update({
   id: '/calendar',
   path: '/calendar',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthRoute = AuthImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -135,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
     '/calendar': {
@@ -294,6 +308,7 @@ const ProfileIdRouteWithChildren = ProfileIdRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/calendar': typeof CalendarRoute
   '/clubsList': typeof ClubsListRoute
   '/trainings': typeof TrainingsRoute
@@ -313,6 +328,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/calendar': typeof CalendarRoute
   '/clubsList': typeof ClubsListRoute
   '/trainings': typeof TrainingsRoute
@@ -333,6 +349,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/calendar': typeof CalendarRoute
   '/clubsList': typeof ClubsListRoute
   '/trainings': typeof TrainingsRoute
@@ -354,6 +371,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/calendar'
     | '/clubsList'
     | '/trainings'
@@ -372,6 +390,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/calendar'
     | '/clubsList'
     | '/trainings'
@@ -390,6 +409,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/calendar'
     | '/clubsList'
     | '/trainings'
@@ -410,6 +430,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   CalendarRoute: typeof CalendarRoute
   ClubsListRoute: typeof ClubsListRoute
   TrainingsRoute: typeof TrainingsRoute
@@ -421,6 +442,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   CalendarRoute: CalendarRoute,
   ClubsListRoute: ClubsListRoute,
   TrainingsRoute: TrainingsRoute,
@@ -441,6 +463,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/auth",
         "/calendar",
         "/clubsList",
         "/trainings",
@@ -452,6 +475,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/auth": {
+      "filePath": "auth.tsx"
     },
     "/calendar": {
       "filePath": "calendar.tsx"
