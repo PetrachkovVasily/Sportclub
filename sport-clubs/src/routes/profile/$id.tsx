@@ -5,22 +5,36 @@ import Profile from "../../components/Profile/Profile";
 import Goals from "../../components/Goals/Goals";
 import SwitchMenu from "../../components/SwitchMenu/SwitchMenu";
 import Achievements from "../../components/Achievements/Achievements";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../../components/Modal/Modal";
+import { useFetchUserQuery, userAPI } from "../../services/UserService";
+import { postAPI } from "../../services/PostService";
+import pb from "../../lib/pocketbase";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 export const Route = createFileRoute("/profile/$id")({
   component: RouteComponent,
-  beforeLoad: () => {
-    redirect({
-      to: "/profile/stats",
-    });
-  },
 });
 
 function RouteComponent() {
+  // const dispatch = useDispatch();
+  // const token = useSelector((state: RootState) => state.authReducer.token);
+  // const userId = useSelector((state: RootState) => state.authReducer.userId);
+
+  // const {
+  //   data: user,
+  //   isLoading: isUserLoading,
+  //   error,
+  // } = useFetchUserQuery(userId!, {
+  //   skip: !token || !userId,
+  // });
+
+  const { id } = Route.useParams();
+
   const menuList = [
-    { name: "Stats", link: "/profile/123/stats" },
-    { name: "Goals", link: "/profile/123/goals" },
+    { name: "Stats", link: "/profile/$id/stats", id: id },
+    { name: "Goals", link: "/profile/$id/goals", id: id },
   ];
 
   const [openAch, setOpenAch] = useState(false);
@@ -40,7 +54,7 @@ function RouteComponent() {
           <Profile />
         </ContentContainer>
         <ContentContainer gap={24} pb={16}>
-          <Goals />
+          <Goals userId={id} />
         </ContentContainer>
       </div>
       <div className="w-[100%] max-w-[576px]">

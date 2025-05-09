@@ -7,7 +7,7 @@ function SwitchMenu({ menuList, activeStyle = null }) {
   return (
     <ul className="w-[100%] h-[28px] flex text-[14px] font-medium text-center text-[#505050]">
       {menuList.map((item) => (
-        <li className="w-[50%] h-[28px]">
+        <li key={item.link} className="w-[50%] h-[28px]">
           {activeStyle ? (
             <div
               aria-current="page"
@@ -21,6 +21,7 @@ function SwitchMenu({ menuList, activeStyle = null }) {
           ) : (
             <Link
               to={item.link}
+              params={item.id}
               aria-current="page"
               className="w-[100%] h-[28px] inline-block rounded-t-lg border-b-2 border-[#D4D4D4]/75 "
               activeProps={{

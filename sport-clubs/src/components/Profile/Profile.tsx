@@ -6,17 +6,13 @@ import profileImg from "../../assets/profileImg.png";
 
 interface Props {}
 
-function Profile(props: Props) {
-  const {} = props;
-  const weekArr = [
-    { active: false, day: "Mo" },
-    { active: false, day: "Tu" },
-    { active: false, day: "We" },
-    { active: true, day: "Th" },
-    { active: false, day: "Fr" },
-    { active: false, day: "Sa" },
-    { active: false, day: "Su" },
-  ];
+function Profile({}) {
+  const { record: user } = JSON.parse(localStorage.getItem("pocketbase_auth"));
+
+  const days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+
+  const d = new Date();
+  const n = d.getDay();
 
   return (
     <>
@@ -27,11 +23,9 @@ function Profile(props: Props) {
           className="rounded-[40px] m-[2px] w-[80px]"
         />
         <div className="flex flex-col gap-[4px] w-[100%] items-center">
-          <h1 className="font-semibold text-[24px]">{"Name"}</h1>
-          <div className="flex justify-between w-[100%]">
-            <NumInfo headNum={2} info={"Clubs"} />
-            <NumInfo headNum={2} info={"Following"} />
-            <NumInfo headNum={2} info={"Followers"} />
+          <h1 className="font-semibold text-[24px]">{user.login}</h1>
+          <div className="flex justify-center w-[100%]">
+            <NumInfo headNum={2} info={"Clubs"} isLink={true}/>
           </div>
         </div>
       </div>
@@ -41,8 +35,12 @@ function Profile(props: Props) {
         <h2 className="font-semibold text-[22px]">{"8h"}</h2>
         <div className="flex flex-col items-center gap-[4px] w-[100%]">
           <div className="flex items-center gap-[4px] w-[100%]">
-            {weekArr.map((item) => (
-              <WeekDay day={item.day} active={item.active} />
+            {days.map((item) => (
+              <WeekDay
+                key={item}
+                day={item}
+                active={days[n] == item ? true : false}
+              />
             ))}
           </div>
 

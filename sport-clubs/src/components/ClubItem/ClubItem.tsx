@@ -5,11 +5,11 @@ import { Link } from "@tanstack/react-router";
 
 interface Props {}
 
-function ClubItem({ isMember = false }) {
+function ClubItem({ isMember = false, club }) {
   return (
     <div className="flex gap-[12px] w-[100%] p-[8px] items-center justify-between ">
       <div className="flex gap-[12px] w-[100%] items-center">
-        <Link to={"/club/123/rating"}>
+        <Link to="/club/$id/rating" params={{ id: club.id }}>
           <img
             src={profileImg}
             alt="AchImg"
@@ -18,27 +18,27 @@ function ClubItem({ isMember = false }) {
         </Link>
         <div className="w-[100%] flex flex-col max-w-[186px] text-ellipsis overflow-hidden">
           <div className="flex items-center gap-[8px]">
-            <Link to={"/club/123/rating"}>
+            <Link to="/club/$id/rating" params={{ id: club.id }}>
               <h2 className="font-semibold text-[18px] text-nowrap text-ellipsis overflow-hidden">
-                {"Club name"}
+                {club.name}
               </h2>
             </Link>
             <h3 className="text-[14px]  text-[#505050] text-nowrap text-ellipsis overflow-hidden">
-              {"public"}
+              {club.status}
             </h3>
           </div>
           {/* <h3 className="text-[12px]  text-[#505050] text-nowrap text-ellipsis overflow-hidden">
                   {"42 members"}
                 </h3> */}
           <h3 className="text-[14px]  text-[#505050] text-nowrap text-ellipsis overflow-hidden">
-            {"category"}
+            {club.category}
           </h3>
         </div>
       </div>
       <div className="flex items-center gap-[8px] ">
         {isMember ? (
           <>
-            <Link to={"/chat/123"}>
+            <Link to={"/chat/$id"} params={{ id: club.id }}>
               <button className="w-[96px] px-[8px] py-[4px] rounded-[4px] font-bold bg-[#F2B749] text-white text-[14px]">
                 Chat
               </button>

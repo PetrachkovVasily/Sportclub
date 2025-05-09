@@ -17,8 +17,6 @@ function Achievements({
   clubAchAmount,
   openModal = () => {},
 }) {
-  console.log(openModal);
-
   return (
     <>
       <div className="w-[100%] flex flex-col gap-[8px] items-center">

@@ -10,15 +10,31 @@ import ActionBtn from "../ActionBtn/ActionBtn";
 import Modal from "../Modal/Modal";
 import CreateClubModal from "../CreateClubModal/CreateClubModal";
 import logo from "../../assets/potato.png";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { useFetchUserQuery } from "../../services/UserService";
 
 interface Props {}
 
 function Header() {
   const [openCreateClub, setOpenCreateClub] = useState(false);
 
+  // const userId = useSelector((state: RootState) => state.authReducer.userId);
+  // const token = useSelector((state: RootState) => state.authReducer.token);
+
+  // const {
+  //   data: user,
+  //   isLoading: isUserLoading,
+  //   error,
+  // } = useFetchUserQuery(userId!, {
+  //   skip: !token || !userId,
+  // });
+
   const closeModal = () => {
     setOpenCreateClub(false);
   };
+
+  const user = JSON.parse(localStorage.getItem("pocketbase_auth"));
 
   return (
     <Navbar fluid className="fixed w-[100%] z-50 shadow-md">
@@ -32,7 +48,8 @@ function Header() {
       <NavbarCollapse>
         <Link
           className="p-[4px] flex items-center md:justify-center justify-start"
-          to={"/profile/123/stats"}
+          to="/profile/$id/stats"
+          params={{ id: user.record.id }}
         >
           Profile
         </Link>
