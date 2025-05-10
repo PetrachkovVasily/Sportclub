@@ -2,11 +2,23 @@ import React, { useState } from "react";
 import addBtn from "../../assets/add-svgrepo-com 1.svg";
 import Activity from "../Activity/Activity";
 import Dropdown from "../Dropdown/Dropdown";
+import {
+  useGetActivityQuery,
+  useGetClubWorkoutsQuery,
+  useGetWorkoutActivitiesQuery,
+  useGetWorkoutActivityQuery,
+} from "../../services/UserService";
+import AccordionItem from "../AccordionItem/AccordionItem";
 
 interface Props {}
 
-function Accordion({}) {
+function Accordion({ activities, workout }) {
   const [hideControl, setHideControl] = useState("hidden");
+
+  const workoutActivities = useGetWorkoutActivitiesQuery(workout.id)?.data
+    ?.items;
+  // const workoutActivity = useGetWorkoutActivityQuery(workout.id);
+
   return (
     <div id="accordion-collapse" data-accordion="collapse" className="w-[100%]">
       <h2 id="accordion-collapse-heading-1">
@@ -20,7 +32,7 @@ function Accordion({}) {
             setHideControl(hideControl == "" ? "hidden" : "");
           }}
         >
-          <span>Workout 1</span>
+          <span>{workout.name}</span>
           <svg
             data-accordion-icon
             className="w-3 h-3 rotate-180 shrink-0"
@@ -34,9 +46,9 @@ function Accordion({}) {
           >
             <path
               stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
               d="M9 5 5 1 1 5"
             />
           </svg>
@@ -48,15 +60,10 @@ function Accordion({}) {
         aria-labelledby="accordion-collapse-heading-1"
       >
         <div className="py-[8px] px-[16px] rounded-b-[4px] bg-[#404040]/6 flex flex-col items-center gap-[8px] w-[100%] ">
-          <Activity amount={115} approaches={5}>
-            <Dropdown
-              options={[
-                { value: "pushups", name: "Pushups" },
-                { value: "pullups", name: "Pullups" },
-              ]}
-              width={undefined}
-            />
-          </Activity>
+          {workoutActivities?.map((item) => {
+            return <AccordionItem activities={activities} workoutActivity={item}/>;
+          })}
+
           <button className="mt-[4px] bg-white rounded-2xl ">
             <img src={addBtn} alt="" />
           </button>

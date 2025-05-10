@@ -10,23 +10,28 @@ import ClubHead from "../../components/ClubHead/ClubHead";
 import SwitchMenu from "../../components/SwitchMenu/SwitchMenu";
 import Modal from "../../components/Modal/Modal";
 import { useState } from "react";
+import { useGetSingleClubQuery } from "../../services/UserService";
 
 export const Route = createFileRoute("/club/$id")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const { id } = Route.useParams();
+
   const menuList = [
-    { name: "Rating", link: "/club/123/rating" },
-    { name: "Schedule", link: "/club/123/schedule" },
-    { name: "Workouts", link: "/club/123/workouts" },
-    { name: "Achievements", link: "/club/123/achievements" },
+    { name: "Rating", link: "/club/$id/rating", id: id },
+    { name: "Schedule", link: "/club/$id/schedule", id: id },
+    { name: "Workouts", link: "/club/$id/workouts", id: id },
+    { name: "Achievements", link: "/club/$id/achievements", id: id },
   ];
+
+  const club = useGetSingleClubQuery(id)?.data;
 
   return (
     <PageWrapper>
       <article className="max-w-[880px] w-[100%] flex flex-col gap-[24px] ">
-        <ClubHead />
+        <ClubHead club={club} />
         <div className="w-[100%] max-w-[880px]">
           <SwitchMenu menuList={menuList} />
           <section className="flex flex-col rounded-b-[8px] bg-white w-[100%] max-w-[880px] gap-[24px] p-[16px] py-[24px]">
@@ -43,11 +48,7 @@ function RouteComponent() {
           <InfoNote info="members" src={membersImg} num={16} />
         </section>
         <ContentContainer gap={22} pb={16}>
-          <Achievements
-            isClub={true}
-            userAchAmount={8}
-            clubAchAmount={16}
-          />
+          <Achievements isClub={true} userAchAmount={8} clubAchAmount={16} />
         </ContentContainer>
       </article>
     </PageWrapper>

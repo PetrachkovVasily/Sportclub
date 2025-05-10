@@ -145,6 +145,12 @@ export const userAPI = createApi({
       },
     }),
 
+    getSingleClub: build.query({
+      query: (clubId) => ({
+        url: `/club/records/${clubId}`,
+      }),
+    }),
+
     updateClubUsers: build.mutation({
       query: ({ clubId, newUserId, currentUsers, isRemove = false }) => {
         if (isRemove) {
@@ -169,6 +175,82 @@ export const userAPI = createApi({
         };
       },
     }),
+
+    getClubActivities: build.query({
+      query: (clubId) => ({
+        url: "/activity/records",
+        params: {
+          filter: `relation~"${clubId}"`,
+          expand: "relation",
+        },
+      }),
+      providesTags: ["Activity"],
+    }),
+
+    deleteClubActivity: build.mutation({
+      query: (postId) => ({
+        url: `/activity/records/${postId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Activity"],
+    }),
+
+    addClubActivity: build.mutation({
+      query: (postData) => ({
+        url: `/activity/records`,
+        method: "POST",
+        body: postData,
+      }),
+      invalidatesTags: ["Activity"],
+    }),
+
+    getClubWorkouts: build.query({
+      query: (clubId) => ({
+        url: "/workout/records",
+        params: {
+          filter: `club_id~"${clubId}"`,
+          expand: "club_id",
+        },
+      }),
+    }),
+
+    getWorkoutActivities: build.query({
+      query: (workoutId) => ({
+        url: "/workoutActivity/records",
+        params: {
+          filter: `workout_id~"${workoutId}"`,
+          expand: "workout_id",
+        },
+      }),
+    }),
+
+    getWorkoutActivity: build.query({
+      query: (workoutId) => ({
+        url: `/workout_id/records`,
+        params: {
+          filter: `workout_id="${workoutId}"`,
+          perPage: 1,
+        },
+      }),
+    }),
+
+    getActivity: build.query({
+      query: (workoutActivityId) => ({
+        url: `/activity/records`,
+        params: {
+          filter: `workoutActivity~"${workoutActivityId}"`,
+          perPage: 1,
+        },
+      }),
+    }),
+
+    updateWorkoutActivity: build.mutation({
+      query: ({ id, ...fields }) => ({
+        url: `/workoutActivity/records/${id}`,
+        method: "PATCH",
+        body: fields,
+      }),
+    }),
   }),
 });
 export const {
@@ -187,4 +269,18 @@ export const {
   useLazyGetClubsQuery,
 
   useUpdateClubUsersMutation,
+  useGetSingleClubQuery,
+
+  useGetClubActivitiesQuery,
+  useDeleteClubActivityMutation,
+  useAddClubActivityMutation,
+
+  useGetClubWorkoutsQuery,
+
+  useGetWorkoutActivitiesQuery,
+
+  useGetActivityQuery,
+  useGetWorkoutActivityQuery,
+
+  useUpdateWorkoutActivityMutation,
 } = userAPI;

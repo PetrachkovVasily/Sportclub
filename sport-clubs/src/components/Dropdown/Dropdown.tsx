@@ -7,16 +7,20 @@ function Dropdown({
   isEmpty = false,
   width = "fit-content",
   onChange = () => {},
+  value = "",
 }) {
   return (
     <select
-      onChange={onChange}
+      value={value}
+      onChange={(e) => {
+        onChange(e.target.value);
+      }}
       style={{
         width: width,
       }}
     >
       {isEmpty ? <option style={{ display: "none" }}></option> : <></>}
-      {options.map((item) => (
+      {options?.map((item) => (
         <option key={item.value} value={item.value}>
           {item.name}
         </option>
