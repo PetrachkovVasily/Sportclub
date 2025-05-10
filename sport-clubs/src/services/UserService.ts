@@ -96,22 +96,78 @@ export const userAPI = createApi({
     }),
 
     getUserClubs: build.query({
-      query: (userId) => ({
-        url: "/club/records",
-        params: {
-          filter: `user_id~"${userId}"`,
-          expand: "user_id",
-        },
-      }),
+      query: ({ userId, name, category, status, country, city }) => {
+        const filters: string[] = [];
+
+        // console.log(userId, name, category, status, country, city);
+
+        if (name) filters.push(`name ~ "${name}"`);
+        if (country) filters.push(`country ~ "${country}"`);
+        if (city) filters.push(`city ~ "${city}"`);
+        if (category && category != "no category")
+          filters.push(`category = "${category}"`);
+        if (status && status != "no status") filters.push(`status="${status}"`);
+        return {
+          url: "/club/records",
+          params: {
+            filter:
+              `user_id~"${userId}"` +
+              (filters.length ? " && " : "") +
+              filters.join(" && "),
+            expand: "user_id",
+          },
+        };
+      },
     }),
-    getAllClubs: build.query({
-      query: (userId) => ({
-        url: "/club/records",
-        params: {
-          filter: `user_id!~"${userId}"`,
-          expand: "user_id",
-        },
-      }),
+
+    getClubs: build.query({
+      query: ({ userId, name, category, status, country, city }) => {
+        const filters: string[] = [];
+
+        // console.log(userId, name, category, status, country, city);
+
+        if (name) filters.push(`name ~ "${name}"`);
+        if (country) filters.push(`country ~ "${country}"`);
+        if (city) filters.push(`city ~ "${city}"`);
+        if (category && category != "no category")
+          filters.push(`category = "${category}"`);
+        if (status && status != "no status") filters.push(`status="${status}"`);
+        return {
+          url: "/club/records",
+          params: {
+            filter:
+              `user_id!~"${userId}"` +
+              (filters.length ? " && " : "") +
+              filters.join(" && "),
+            expand: "user_id",
+          },
+        };
+      },
+    }),
+
+    updateClubUsers: build.mutation({
+      query: ({ clubId, newUserId, currentUsers, isRemove = false }) => {
+        if (isRemove) {
+          const updated = currentUsers.filter((id) => id !== newUserId);
+          return {
+            url: `/club/records/${clubId}`,
+            method: "PATCH",
+            body: {
+              user_id: updated,
+            },
+          };
+        }
+        const updated = Array.from(
+          new Set([...(currentUsers || []), newUserId])
+        );
+        return {
+          url: `/club/records/${clubId}`,
+          method: "PATCH",
+          body: {
+            user_id: updated,
+          },
+        };
+      },
     }),
   }),
 });
@@ -119,11 +175,16 @@ export const {
   useFetchUserQuery,
   useLoginMutation,
   useRegisterMutation,
+
   useGetUserGoalsQuery,
   useGetUserWeekGoalsQuery,
   useGetUserMonthGoalsQuery,
   useGetUserYearGoalsQuery,
+
   useDeleteGoalMutation,
-  useGetUserClubsQuery,
-  useGetAllClubsQuery,
+
+  useLazyGetUserClubsQuery,
+  useLazyGetClubsQuery,
+
+  useUpdateClubUsersMutation,
 } = userAPI;

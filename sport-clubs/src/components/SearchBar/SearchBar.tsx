@@ -1,25 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Dropdown from "../Dropdown/Dropdown";
 import slider from "../../assets/sliders-svgrepo-com 1.svg";
+import { clubCategories } from "../../constants/clubConst";
 
 interface Props {}
 
-function SearchBar({ onFilter }) {
-  const [filters, setFilters] = useState({
-    query: "",
-    status: "",
-    city: "",
-    country: "",
-    category: "",
-  });
-
+function SearchBar({ onFilter, filters, setFilters }) {
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleChange = (field, value) => {
     const updated = { ...filters, [field]: value };
     setFilters(updated);
     onFilter(updated);
   };
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowAdvanced(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="w-full flex gap-[6px] relative ">
@@ -50,19 +57,26 @@ function SearchBar({ onFilter }) {
         <input
           type="text"
           placeholder="Search"
-          value={filters.query}
-          onChange={(e) => handleChange("query", e.target.value)}
+          value={filters.name}
+          onChange={(e) => handleChange("name", e.target.value)}
           className="w-full border-[2px] border-l-0 border-[#404040]/12 px-2 py-1 rounded-r-[8px]"
         />
       </div>
 
       {/* Выпадающее меню с фильтрами */}
       {showAdvanced && (
-        <div className=" flex flex-col gap-[8px] rounded-[4px] shadow-lg border-[2px] border-[#404040]/18 bg-white  absolute top-[42px] p-[12px] z-25">
+        <div
+          ref={dropdownRef}
+          className=" flex flex-col gap-[8px] rounded-[4px] shadow-lg border-[2px] border-[#404040]/18 bg-white  absolute top-[42px] p-[12px] z-25"
+        >
           {/* Статус */}
           <div className="border-[2px] bg-white border-[#505050]/12 rounded-[4px] text-[14px] ">
             <Dropdown
+              onChange={(e) => {
+                handleChange("status", e.target.value);
+              }}
               options={[
+                { option: "no status", name: "no status" },
                 { option: "public", name: "public" },
                 { option: "private", name: "private" },
               ]}
@@ -72,11 +86,12 @@ function SearchBar({ onFilter }) {
 
           <div className="border-[2px]  bg-white border-[#505050]/12 rounded-[4px] text-[14px] ">
             <Dropdown
-              options={[
-                { option: "running", name: "running" },
-                { option: "workout", name: "workout" },
-              ]}
-              isEmpty={true}
+              onChange={(e) => {
+                handleChange("category", e.target.value);
+              }}
+              options={clubCategories.map((item) => {
+                return { option: item, name: item };
+              })}
               width="100%"
             />
           </div>

@@ -17,7 +17,9 @@ function Dropdown({
     >
       {isEmpty ? <option style={{ display: "none" }}></option> : <></>}
       {options.map((item) => (
-        <option value={item.value}>{item.name}</option>
+        <option key={item.value} value={item.value}>
+          {item.name}
+        </option>
       ))}
     </select>
   );
