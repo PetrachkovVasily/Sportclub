@@ -13,8 +13,8 @@ export const Route = createFileRoute("/chat/$id")({
 });
 
 function RouteComponent() {
-  const [openUserList, setOpenUserList] = useState(false);
   const MEMBERS = "Members";
+  const [openUserList, setOpenUserList] = useState(false);
   const [optionValue, setOptionValue] = useState(MEMBERS);
 
   const openModal = () => {

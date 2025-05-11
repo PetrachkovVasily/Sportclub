@@ -5,7 +5,7 @@ import { useDeleteClubAchievementMutation } from "../../services/UserService";
 
 interface Props {}
 
-function ClubAch({ name, info, date, progress = 0, id }) {
+function ClubAch({ name, info, date, progress = 0, id, isUser = true }) {
   const [deleteAchievement] = useDeleteClubAchievementMutation();
 
   const handleDelete = () => {
@@ -32,10 +32,11 @@ function ClubAch({ name, info, date, progress = 0, id }) {
           {date}
         </h3>
       </div>
-
-      <button onClick={handleDelete}>
-        <img className="w-[22px] " src={deleteBtn} alt="" />
-      </button>
+      {isUser || (
+        <button onClick={handleDelete}>
+          <img className="w-[22px] " src={deleteBtn} alt="" />
+        </button>
+      )}
     </div>
   );
 }

@@ -7,6 +7,7 @@ import EventList from "../../../components/EventList/EventList";
 import {
   useAddEventMutation,
   useDeleteEventMutation,
+  useGetClubAdminsQuery,
   useGetClubWorkoutsQuery,
   useGetEventsQuery,
   useUpdateEventMutation,
@@ -30,6 +31,7 @@ function RouteComponent() {
   const { id } = Route.useParams();
 
   const rawEvents = useGetEventsQuery(id)?.data?.items || [];
+
   const workouts = useGetClubWorkoutsQuery(id)?.data?.items;
 
   const [addEvent] = useAddEventMutation();
@@ -53,8 +55,6 @@ function RouteComponent() {
 
   useEffect(() => {
     if (workouts) {
-      console.log(workouts[0].name);
-
       setWorkout(workouts[0].name);
     }
   }, [workouts]);
@@ -149,7 +149,6 @@ function RouteComponent() {
     // const updatedEvents = [...(events[dateKey] || [])];
     // const deleted = updatedEvents[i];
     // console.log("Deleting event", deleted);
-    console.log();
 
     deleteEvent(id);
     closeModal();
@@ -164,6 +163,19 @@ function RouteComponent() {
   //     return true;
   //   }
   // };
+
+  //Search for admin
+  const admins = useGetClubAdminsQuery(id)?.data?.items;
+  const { record: user } = JSON.parse(localStorage.getItem("pocketbase_auth"));
+
+  const [isUser, setIsUser] = useState(true);
+
+  useEffect(() => {
+    if (admins) {
+      setIsUser(!(admins.find((item) => item.admin_id == user.id) !== -1));
+    }
+  }, [admins]);
+  ///////////////////
 
   return (
     <>
@@ -186,66 +198,72 @@ function RouteComponent() {
             events={events}
             startEditing={startEditing}
             deleteEvent={handleDeleteEvent}
-            isUser={false}
+            isUser={isUser}
           />
 
           {/* Форма добавления / редактирования */}
-
-          {selectedDate.isBefore(dayjs().startOf("day")) || (
+          {isUser || (
             <>
-              <div className="space-y-2 mb-3">
-                <div className="px-2 py-1 w-[100%] rounded-[4px] border-[2px] border-[#404040]/12 flex items-center ">
-                  <Dropdown
-                    isEmpty={true}
-                    options={workouts?.map((item) => ({
-                      value: item.name,
-                      name: item.name,
-                    }))}
-                    width={"100%"}
-                    value={workout}
-                    onChange={(item) => {
-                      setWorkout(item);
+              {selectedDate.isBefore(dayjs().startOf("day")) || (
+                <>
+                  <div className="space-y-2 mb-3">
+                    <div className="px-2 py-1 w-[100%] rounded-[4px] border-[2px] border-[#404040]/12 flex items-center ">
+                      <Dropdown
+                        isEmpty={true}
+                        options={workouts?.map((item) => ({
+                          value: item.name,
+                          name: item.name,
+                        }))}
+                        width={"100%"}
+                        value={workout}
+                        onChange={(item) => {
+                          setWorkout(item);
 
-                      setNewEvent({
-                        ...newEvent,
-                        workout_id: workouts?.find((el) => {
-                          return el.name == item;
-                        }).id,
-                      });
-                    }}
-                  />
-                </div>
+                          setNewEvent({
+                            ...newEvent,
+                            workout_id: workouts?.find((el) => {
+                              return el.name == item;
+                            }).id,
+                          });
+                        }}
+                      />
+                    </div>
 
-                <input
-                  type="text"
-                  placeholder="Location"
-                  value={newEvent.location}
-                  onChange={(e) =>
-                    setNewEvent({ ...newEvent, location: e.target.value })
-                  }
-                  className="w-full border-[2px] border-[#404040]/12 px-2 py-1 rounded-[4px]"
-                />
+                    <input
+                      type="text"
+                      placeholder="Location"
+                      value={newEvent.location}
+                      onChange={(e) =>
+                        setNewEvent({ ...newEvent, location: e.target.value })
+                      }
+                      className="w-full border-[2px] border-[#404040]/12 px-2 py-1 rounded-[4px]"
+                    />
 
-                <div className="flex gap-2">
-                  <input
-                    type="time"
-                    value={newEvent.startTime}
-                    onChange={(e) =>
-                      setNewEvent({ ...newEvent, startTime: e.target.value })
-                    }
-                    className="w-1/2 border-[2px] border-[#404040]/12 px-2 py-1 rounded-[4px]"
-                  />
+                    <div className="flex gap-2">
+                      <input
+                        type="time"
+                        value={newEvent.startTime}
+                        onChange={(e) =>
+                          setNewEvent({
+                            ...newEvent,
+                            startTime: e.target.value,
+                          })
+                        }
+                        className="w-1/2 border-[2px] border-[#404040]/12 px-2 py-1 rounded-[4px]"
+                      />
 
-                  <input
-                    type="time"
-                    value={newEvent.endTime}
-                    onChange={(e) =>
-                      setNewEvent({ ...newEvent, endTime: e.target.value })
-                    }
-                    className="w-1/2 border-[2px] border-[#404040]/12 px-2 py-1 rounded-[4px]"
-                  />
-                </div>
-              </div>
+                      <input
+                        type="time"
+                        value={newEvent.endTime}
+                        onChange={(e) =>
+                          setNewEvent({ ...newEvent, endTime: e.target.value })
+                        }
+                        className="w-1/2 border-[2px] border-[#404040]/12 px-2 py-1 rounded-[4px]"
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
             </>
           )}
 
@@ -257,12 +275,16 @@ function RouteComponent() {
               Close
             </button>
             {selectedDate.isBefore(dayjs().startOf("day")) || (
-              <button
-                onClick={addOrEditEvent}
-                className="px-3 py-1 bg-[#F2B749] text-white  rounded-[4px]"
-              >
-                {editIndex !== null ? "Save" : "Add"}
-              </button>
+              <>
+                {isUser || (
+                  <button
+                    onClick={addOrEditEvent}
+                    className="px-3 py-1 bg-[#F2B749] text-white  rounded-[4px]"
+                  >
+                    {editIndex !== null ? "Save" : "Add"}
+                  </button>
+                )}
+              </>
             )}
           </div>
         </Modal>

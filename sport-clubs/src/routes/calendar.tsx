@@ -6,22 +6,37 @@ import Calendar from "../components/Calendar/Calendar";
 import dayjs from "dayjs";
 import { useState } from "react";
 import EventList from "../components/EventList/EventList";
+import {
+  useGetEventsForUserClubsQuery,
+  useGetEventsQuery,
+  useGetUserClubsForEventsQuery,
+} from "../services/UserService";
 
 export const Route = createFileRoute("/calendar")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const { record: user } = JSON.parse(localStorage.getItem("pocketbase_auth"));
+
+  const clubs = useGetUserClubsForEventsQuery({ userId: user.id })?.data?.items;
+  const communityIds = clubs?.map((item) => item.id);
+  const myEvents =
+    useGetEventsForUserClubsQuery(communityIds, {
+      skip: !communityIds?.length,
+    })?.data?.items || [];
+
+  // console.log(myEvents);
+
   const [currentDate, setCurrentDate] = useState(dayjs());
-  const [events, setEvents] = useState({});
   const [selectedDate, setSelectedDate] = useState(currentDate);
 
-  const [newEvent, setNewEvent] = useState({
-    title: "",
-    location: "",
-    startTime: "",
-    endTime: "",
-  });
+  const events = myEvents.reduce((acc, ev) => {
+    const dateKey = dayjs.utc(ev.date).local().format("YYYY-MM-DD");
+    if (!acc[dateKey]) acc[dateKey] = [];
+    acc[dateKey].push(ev);
+    return acc;
+  }, {});
 
   const [editIndex, setEditIndex] = useState(null);
 
@@ -52,55 +67,11 @@ function RouteComponent() {
 
   const openModal = (date) => {
     setSelectedDate(date);
-    resetEventForm();
     setEditIndex(null);
   };
 
-  const closeModal = () => {
-    setSelectedDate(null);
-    resetEventForm();
-    setEditIndex(null);
-  };
+  const [active, setActive] = useState(currentDate);
 
-  const resetEventForm = () => {
-    setNewEvent({
-      title: "",
-      location: "",
-      startTime: "",
-      endTime: "",
-    });
-  };
-
-  const addOrEditEvent = () => {
-    const { title } = newEvent;
-    if (!title.trim()) return;
-
-    const key = selectedDate.format("YYYY-MM-DD");
-    const currentEvents = events[key] || [];
-
-    if (editIndex !== null) {
-      const updated = [...currentEvents];
-      updated[editIndex] = newEvent;
-      setEvents({ ...events, [key]: updated });
-    } else {
-      setEvents({ ...events, [key]: [...currentEvents, newEvent] });
-    }
-
-    resetEventForm();
-    setEditIndex(null);
-  };
-
-  const startEditing = (i, event) => {
-    setNewEvent(event);
-    setEditIndex(i);
-  };
-
-  const deleteEvent = (i) => {
-    const key = selectedDate.format("YYYY-MM-DD");
-    const updated = [...(events[key] || [])];
-    updated.splice(i, 1);
-    setEvents({ ...events, [key]: updated });
-  };
   return (
     <PageWrapper>
       <article className="max-w-[880px] w-[100%] flex flex-col gap-[24px] ">
@@ -112,6 +83,8 @@ function RouteComponent() {
             calendar={calendar}
             events={events}
             openModal={openModal}
+            active={active}
+            setActive={setActive}
           />
         </section>
       </article>
@@ -122,9 +95,9 @@ function RouteComponent() {
           <EventList
             selectedDate={selectedDate}
             events={events}
-            startEditing={startEditing}
-            deleteEvent={deleteEvent}
-            isUser={false}
+            startEditing={() => {}}
+            deleteEvent={() => {}}
+            isUser={true}
           />
         </section>
       </article>

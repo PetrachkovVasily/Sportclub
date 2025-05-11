@@ -15,6 +15,20 @@ function EventList({
   const [updateEvent] = useUpdateEventMutation();
   const { record: user } = JSON.parse(localStorage.getItem("pocketbase_auth"));
 
+  const sortClubs = (members) => {
+    const grouped = members.reduce((acc, member) => {
+      if (!acc[member.club_id]) {
+        acc[member.club_id] = [];
+      }
+      acc[member.club_id].push(member);
+      return acc;
+    }, {});
+  };
+
+  // if (events) {
+  //   console.log(sortClubs(events));
+  // }
+
   return (
     <>
       <h3 className="text-[18px] mb-3 text-[#505050] ">
@@ -22,19 +36,24 @@ function EventList({
       </h3>
 
       {/* Список событий */}
-      <ul className="space-y-2 mb-4">
-        {(events[selectedDate.format("YYYY-MM-DD")] || []).map((ev, i) => (
-          <EventItem
-            i={i}
-            ev={ev}
-            selectedDate={selectedDate}
-            updateEvent={updateEvent}
-            user={user}
-            isUser={isUser}
-            startEditing={startEditing}
-            deleteEvent={deleteEvent}
-          />
-        ))}
+      <ul className="space-y-2 mb-4 w-full">
+        {(events[selectedDate.format("YYYY-MM-DD")] || [])
+          .sort((a, b) => (a.club_id > b.club_id ? 1 : -1))
+          .map((ev, i) => (
+            <>
+              {/* {ev.club_id} */}
+              <EventItem
+                i={i}
+                ev={ev}
+                selectedDate={selectedDate}
+                updateEvent={updateEvent}
+                user={user}
+                isUser={isUser}
+                startEditing={startEditing}
+                deleteEvent={deleteEvent}
+              />
+            </>
+          ))}
       </ul>
     </>
   );

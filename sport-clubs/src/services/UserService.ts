@@ -375,9 +375,60 @@ export const userAPI = createApi({
       }),
       invalidatesTags: ["Event"],
     }),
+
+    getUserClubsForEvents: build.query({
+      query: ({ userId }) => {
+        console.log(userId);
+
+        return {
+          url: "/club/records",
+          params: {
+            filter: `user_id~"${userId}"`,
+            expand: "user_id",
+          },
+        };
+      },
+    }),
+
+    getEventsForUserClubs: build.query({
+      query: (clubIds) => {
+        const filter = clubIds.map((id) => `club_id = "${id}"`).join(" || ");
+        return {
+          url: "/event/records",
+          params: {
+            filter,
+            expand: "club_id,workout_id,user_id",
+          },
+        };
+      },
+    }),
+
+    getClubAdmins: build.query({
+      query: (clubId) => ({
+        url: "/admin/records",
+        params: {
+          filter: `club_id~"${clubId}"`,
+          expand: "club_id",
+        },
+      }),
+    }),
+
+    getClubUsers: build.query({
+      query: (clubId) => ({
+        url: `/club/records/${clubId}`,
+        params: {
+          expand: "user_id",
+        },
+      }),
+    }),
   }),
 });
 export const {
+  useGetClubUsersQuery,
+  useGetClubAdminsQuery,
+
+  useGetEventsForUserClubsQuery,
+  useGetUserClubsForEventsQuery,
   useFetchUserQuery,
   useLoginMutation,
   useRegisterMutation,

@@ -4,12 +4,13 @@ import Achievement from "../../../components/Achievement/Achievement";
 import Line from "../../../components/Line/Line";
 import ClubAch from "../../../components/ClubAch/ClubAch";
 import addBtn from "../../../assets/add-svgrepo-com 1.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../../../components/Modal/Modal";
 import AchForm from "../../../components/AchForm/AchForm";
 import {
   useGetClubAchievementsQuery,
   useGetClubActivitiesQuery,
+  useGetClubAdminsQuery,
 } from "../../../services/UserService";
 
 export const Route = createFileRoute("/club/$id/achievements")({
@@ -31,6 +32,20 @@ function RouteComponent() {
   const activities = useGetClubActivitiesQuery(id)?.data?.items;
 
   const achievements = useGetClubAchievementsQuery(id)?.data?.items;
+
+  //Search for admin
+  const admins = useGetClubAdminsQuery(id)?.data?.items;
+  const { record: user } = JSON.parse(localStorage.getItem("pocketbase_auth"));
+
+  const [isUser, setIsUser] = useState(true);
+
+  useEffect(() => {
+    if (admins) {
+      setIsUser(!(admins.find((item) => item.admin_id == user.id) !== -1));
+    }
+  }, [admins]);
+  ///////////////////
+  console.log(isUser);
 
   return (
     <article className="w-[100%] flex flex-col gap-[12px]">
@@ -55,18 +70,21 @@ function RouteComponent() {
                 date={item.activity}
                 progress={50}
                 id={item.id}
+                isUser={isUser}
               />
             );
           })}
         </div>
-        <div className="w-full flex justify-center mt-[4px]">
-          <button
-            onClick={openModal}
-            className="mt-[4px] bg-white rounded-2xl border-[2px] border-[#505050]/18 "
-          >
-            <img src={addBtn} alt="" />
-          </button>
-        </div>
+        {isUser || (
+          <div className="w-full flex justify-center mt-[4px]">
+            <button
+              onClick={openModal}
+              className="mt-[4px] bg-white rounded-2xl border-[2px] border-[#505050]/18 "
+            >
+              <img src={addBtn} alt="" />
+            </button>
+          </div>
+        )}
       </div>
       {openCreateAch && (
         <Modal closeModal={closeModal}>

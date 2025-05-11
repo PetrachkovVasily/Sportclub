@@ -6,7 +6,7 @@ import { useUpdateClubUsersMutation } from "../../services/UserService";
 
 interface Props {}
 
-function ClubHead({ club }) {
+function ClubHead({ club, isUser }) {
   const { record: user } = JSON.parse(localStorage.getItem("pocketbase_auth"));
 
   const [updateClubUsers] = useUpdateClubUsersMutation();
