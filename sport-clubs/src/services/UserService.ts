@@ -212,6 +212,47 @@ export const userAPI = createApi({
           expand: "club_id",
         },
       }),
+      providesTags: ["Workout"],
+    }),
+
+    getWorkout: build.query({
+      query: (workoutId) => ({
+        url: `/workout/records/${workoutId}`,
+      }),
+    }),
+
+    // getAllWorkouts: build.query({
+    //   query: (clubId) => ({
+    //     url: "/workout/records",
+    //   }),
+    // }),
+
+    getEventWorkouts: build.query({
+      query: (eventId) => ({
+        url: "/workout/records",
+        params: {
+          filter: `event_id~"${eventId}"`,
+          expand: "event_id",
+        },
+      }),
+      providesTags: ["Event"],
+    }),
+
+    addWorkout: build.mutation({
+      query: (postData) => ({
+        url: `/workout/records`,
+        method: "POST",
+        body: postData,
+      }),
+      invalidatesTags: ["Workout"],
+    }),
+
+    deleteWorkout: build.mutation({
+      query: (postId) => ({
+        url: `/workout/records/${postId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Workout"],
     }),
 
     getWorkoutActivities: build.query({
@@ -222,6 +263,7 @@ export const userAPI = createApi({
           expand: "workout_id",
         },
       }),
+      providesTags: ["WActivity"],
     }),
 
     getWorkoutActivity: build.query({
@@ -234,15 +276,15 @@ export const userAPI = createApi({
       }),
     }),
 
-    getActivity: build.query({
-      query: (workoutActivityId) => ({
-        url: `/activity/records`,
-        params: {
-          filter: `workoutActivity~"${workoutActivityId}"`,
-          perPage: 1,
-        },
-      }),
-    }),
+    // getActivity: build.query({
+    //   query: (workoutActivityId) => ({
+    //     url: `/activity/records`,
+    //     params: {
+    //       filter: `workoutActivity~"${workoutActivityId}"`,
+    //       perPage: 1,
+    //     },
+    //   }),
+    // }),
 
     updateWorkoutActivity: build.mutation({
       query: ({ id, ...fields }) => ({
@@ -250,6 +292,88 @@ export const userAPI = createApi({
         method: "PATCH",
         body: fields,
       }),
+    }),
+
+    addWorkoutActivity: build.mutation({
+      query: (postData) => ({
+        url: `/workoutActivity/records`,
+        method: "POST",
+        body: postData,
+      }),
+      invalidatesTags: ["WActivity"],
+    }),
+
+    deleteWorkoutActivity: build.mutation({
+      query: (postId) => ({
+        url: `/workoutActivity/records/${postId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["WActivity"],
+    }),
+
+    getClubAchievements: build.query({
+      query: (clubId) => ({
+        url: "/achievement/records",
+        params: {
+          filter: `club_id~"${clubId}"`,
+          expand: "club_id",
+        },
+      }),
+      providesTags: ["Achievement"],
+    }),
+
+    addClubAchievement: build.mutation({
+      query: (postData) => ({
+        url: `/achievement/records`,
+        method: "POST",
+        body: postData,
+      }),
+      invalidatesTags: ["Achievement"],
+    }),
+
+    deleteClubAchievement: build.mutation({
+      query: (postId) => ({
+        url: `/achievement/records/${postId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Achievement"],
+    }),
+
+    getEvents: build.query({
+      query: (clubId) => ({
+        url: "/event/records",
+        params: {
+          filter: `club_id~"${clubId}"`,
+          expand: "club_id,workout_id,user_id",
+        },
+      }),
+      providesTags: ["Event"],
+    }),
+
+    addEvent: build.mutation({
+      query: (postData) => ({
+        url: `/event/records`,
+        method: "POST",
+        body: postData,
+      }),
+      invalidatesTags: ["Event"],
+    }),
+
+    updateEvent: build.mutation({
+      query: ({ id, ...fields }) => ({
+        url: `/event/records/${id}`,
+        method: "PATCH",
+        body: fields,
+      }),
+      invalidatesTags: ["Event"],
+    }),
+
+    deleteEvent: build.mutation({
+      query: (postId) => ({
+        url: `/event/records/${postId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Event"],
     }),
   }),
 });
@@ -276,11 +400,26 @@ export const {
   useAddClubActivityMutation,
 
   useGetClubWorkoutsQuery,
+  useAddWorkoutMutation,
+  useDeleteWorkoutMutation,
+  useGetEventWorkoutsQuery,
 
   useGetWorkoutActivitiesQuery,
 
-  useGetActivityQuery,
+  // useGetActivityQuery,
   useGetWorkoutActivityQuery,
 
   useUpdateWorkoutActivityMutation,
+  useAddWorkoutActivityMutation,
+  useDeleteWorkoutActivityMutation,
+
+  useGetClubAchievementsQuery,
+  useAddClubAchievementMutation,
+  useDeleteClubAchievementMutation,
+
+  useGetEventsQuery,
+  useAddEventMutation,
+  useGetWorkoutQuery,
+  useUpdateEventMutation,
+  useDeleteEventMutation,
 } = userAPI;

@@ -2,34 +2,39 @@ import React, { useEffect, useState } from "react";
 import Activity from "../Activity/Activity";
 import Dropdown from "../Dropdown/Dropdown";
 import {
-  useGetActivityQuery,
+  useAddWorkoutActivityMutation,
+  useDeleteWorkoutActivityMutation,
   useUpdateWorkoutActivityMutation,
 } from "../../services/UserService";
 
 interface Props {}
 
 function AccordionItem({ activities, workoutActivity }) {
-  const activity = useGetActivityQuery(workoutActivity.id)?.data?.items;
-
-  const [activityField, setActivityField] = useState(activities[0].name);
+  const [activityField, setActivityField] = useState(workoutActivity.activity);
   const [amount, setAmount] = useState(workoutActivity.amount);
   const [approaches, setApproaches] = useState(workoutActivity.approaches);
 
   const [updateWorkoutActivity] = useUpdateWorkoutActivityMutation();
+  const [deleteWorkoutActivity] = useDeleteWorkoutActivityMutation();
 
-  useEffect(() => {
-    if (activity) {
-      setActivityField(activity[0].name);
-    }
-  }, [activity]);
+  // useEffect(() => {
+  //   // if (activity) {
+  //   setActivityField(activities[0].name);
+  //   // }
+  // }, []);
 
   useEffect(() => {
     updateWorkoutActivity({
       ...workoutActivity,
       amount: amount,
       approaches: approaches,
+      activity: activityField,
     });
   }, [activityField, amount, approaches]);
+
+  const handleDelete = () => {
+    deleteWorkoutActivity(workoutActivity.id);
+  };
 
   return (
     <Activity
@@ -37,8 +42,9 @@ function AccordionItem({ activities, workoutActivity }) {
       approaches={approaches}
       setAmount={setAmount}
       setApproaches={setApproaches}
+      handleDelete={handleDelete}
     >
-      {!!activity && (
+      {!!activities[0].name && (
         <Dropdown
           options={activities?.map((item) => {
             return { value: item.name, name: item.name };

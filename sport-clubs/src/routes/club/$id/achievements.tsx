@@ -7,6 +7,10 @@ import addBtn from "../../../assets/add-svgrepo-com 1.svg";
 import { useState } from "react";
 import Modal from "../../../components/Modal/Modal";
 import AchForm from "../../../components/AchForm/AchForm";
+import {
+  useGetClubAchievementsQuery,
+  useGetClubActivitiesQuery,
+} from "../../../services/UserService";
 
 export const Route = createFileRoute("/club/$id/achievements")({
   component: RouteComponent,
@@ -23,6 +27,11 @@ function RouteComponent() {
     setOpenCreateAch(true);
   };
 
+  const { id } = Route.useParams();
+  const activities = useGetClubActivitiesQuery(id)?.data?.items;
+
+  const achievements = useGetClubAchievementsQuery(id)?.data?.items;
+
   return (
     <article className="w-[100%] flex flex-col gap-[12px]">
       <h1 className="text-[22px] font-normal text-[#505050] ">Achiviements:</h1>
@@ -37,18 +46,18 @@ function RouteComponent() {
           <ProgressBar fillWidth={50} />
         </div>
         <div className="w-[100%] flex flex-col gap-[6px] px-[12px]  ">
-          <ClubAch
-            name={"Qwertyuio"}
-            info={"qwertyu fggg"}
-            date={"29.04.2025"}
-            progress={100}
-          />
-          <ClubAch
-            name={"Qwertyuio"}
-            info={"qwertyu fggg"}
-            date={"29.04.2025"}
-            progress={100}
-          />
+          {achievements?.map((item) => {
+            return (
+              <ClubAch
+                key={item.id}
+                name={item.name}
+                info={item.description}
+                date={item.activity}
+                progress={50}
+                id={item.id}
+              />
+            );
+          })}
         </div>
         <div className="w-full flex justify-center mt-[4px]">
           <button
@@ -61,7 +70,9 @@ function RouteComponent() {
       </div>
       {openCreateAch && (
         <Modal closeModal={closeModal}>
-          <AchForm />
+          {!!activities && (
+            <AchForm id={id} activities={activities} closeModal={closeModal} />
+          )}
         </Modal>
       )}
     </article>

@@ -43,12 +43,24 @@ function RouteComponent() {
         <section
           className={`flex flex-col items-start gap-[8px] p-[24px] rounded-[8px] bg-white w-[19vw] max-w-[280px]`}
         >
-          <InfoNote info="Mogilev, Belarus" src={locationImg} />
-          <InfoNote info="Workout" src={workImg} />
-          <InfoNote info="members" src={membersImg} num={16} />
+          <InfoNote
+            info={club?.country + ", " + club?.city}
+            src={locationImg}
+          />
+          <InfoNote info={club?.category} src={workImg} />
+          <InfoNote
+            info={"members"}
+            src={membersImg}
+            num={club?.user_id.length}
+          />
         </section>
         <ContentContainer gap={22} pb={16}>
-          <Achievements isClub={true} userAchAmount={8} clubAchAmount={16} />
+          <Achievements
+            isClub={true}
+            userAchAmount={8}
+            clubAchAmount={16}
+            clubId={club?.id}
+          />
         </ContentContainer>
       </article>
     </PageWrapper>

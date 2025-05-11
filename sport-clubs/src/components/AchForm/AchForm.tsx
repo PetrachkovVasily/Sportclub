@@ -1,11 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import ActionBtn from "../ActionBtn/ActionBtn";
 import Dropdown from "../Dropdown/Dropdown";
+import {
+  useAddClubAchievementMutation,
+  useGetClubActivitiesQuery,
+} from "../../services/UserService";
 
 interface Props {}
 
-function AchForm(props: Props) {
-  const {} = props;
+function AchForm({ id, activities, closeModal }) {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [activity, setActivity] = useState(activities[0].name);
+  const [amount, setAmount] = useState(0);
+
+  const [addAchievement] = useAddClubAchievementMutation();
+
+  const handleAdd = () => {
+    addAchievement({
+      name: name,
+      description: description,
+      activity: activity,
+      amount: amount,
+      club_id: id,
+    });
+
+    setName("");
+    setDescription("");
+    setActivity(activities[0].name);
+    setAmount(0);
+
+    closeModal();
+  };
 
   return (
     <div className="w-full flex flex-col gap-[20px] items-center ">
@@ -19,8 +45,8 @@ function AchForm(props: Props) {
             <input
               type="text"
               placeholder="Name"
-              //   value={formInfo.name}
-              //   onChange={(e) => handleChange("country", e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="w-full border-[2px] bg-white border-[#505050]/12 px-2 py-1 rounded-[4px]"
             />
           </div>
@@ -31,8 +57,8 @@ function AchForm(props: Props) {
             <input
               type="text"
               placeholder="Description"
-              //   value={formInfo.name}
-              //   onChange={(e) => handleChange("", e.target.value)}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               className="w-full border-[2px] bg-white border-[#505050]/12 px-2 py-1 rounded-[4px]"
             />
           </div>
@@ -43,11 +69,12 @@ function AchForm(props: Props) {
           </h3>
           <div className="border-[2px] w-full max-w-[160px] bg-white border-[#505050]/12 rounded-[4px] text-[16px] ">
             <Dropdown
-              options={[
-                { option: "public", name: "public" },
-                { option: "private", name: "private" },
-              ]}
+              options={activities?.map((item) => {
+                return { value: item.name, name: item.name };
+              })}
               width="100%"
+              value={activity}
+              onChange={setActivity}
             />
           </div>
         </div>
@@ -57,13 +84,14 @@ function AchForm(props: Props) {
           </h3>
           <input
             className="w-full max-w-[160px] h-auto text-[14px] font-semibold text-[#505050] "
-            value={0}
+            value={amount}
+            onChange={(e) => setAmount(+e.target.value)}
             type="number"
             min={1}
           />
         </div>
       </div>
-      <ActionBtn>Create</ActionBtn>
+      <ActionBtn onClick={handleAdd}>Create</ActionBtn>
     </div>
   );
 }

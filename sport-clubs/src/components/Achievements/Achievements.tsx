@@ -7,6 +7,7 @@ import ProgressBar from "../ProgressBar/ProgressBar";
 import AchImg from "../AchImg/AchImg";
 import AchList from "../AchList/AchList";
 import Modal from "../Modal/Modal";
+import { Link } from "@tanstack/react-router";
 
 interface Props {}
 
@@ -16,6 +17,7 @@ function Achievements({
   userAchAmount,
   clubAchAmount,
   openModal = () => {},
+  clubId = null,
 }) {
   return (
     <>
@@ -50,7 +52,13 @@ function Achievements({
           <></>
         )}
 
-        {isClub ? <ViewBtn /> : isModal || <ViewBtn onClick={openModal} />}
+        {isClub ? (
+          <Link to="/club/$id/achievements" params={{ id: clubId }}>
+            <ViewBtn />
+          </Link>
+        ) : (
+          isModal || <ViewBtn onClick={openModal} />
+        )}
       </div>
     </>
   );

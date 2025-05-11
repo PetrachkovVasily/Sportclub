@@ -1,6 +1,8 @@
 import dayjs from "dayjs";
 import left from "../../assets/left.svg";
 import right from "../../assets/right.svg";
+import { useGetEventWorkoutsQuery } from "../../services/UserService";
+import CalendarField from "./CalendarField";
 
 const Calendar = ({
   currentDate,
@@ -32,27 +34,13 @@ const Calendar = ({
         ))}
         {calendar.map((week) =>
           week.map((day) => {
-            const dayStr = day.format("YYYY-MM-DD");
-            const isToday = day.isSame(dayjs(), "day");
-            const isCurrentMonth = day.isSame(currentDate, "month");
-            const hasEvent = !!events[dayStr]?.length;
-
             return (
-              <div
-                key={dayStr}
-                onClick={() => openModal(day)}
-                className={`p-2 h-20 border-[1px] rounded-[4px] border-[#404040]/12 relative cursor-pointer hover:bg-[#F2B749]/12 transition ${
-                  !isCurrentMonth ? "text-gray-400" : ""
-                } ${isToday ? "bg-[#F2B749]/24" : ""}`}
-              >
-                <div className="text-sm">{day.date()}</div>
-                {hasEvent && (
-                  <div className="absolute bottom-1 left-1 right-1 font-semibold text-[12px] bg-[#F2B749]/75 rounded px-1 truncate">
-                    {events[dayStr][0].title}
-                    {events[dayStr].length > 1 && " +"}
-                  </div>
-                )}
-              </div>
+              <CalendarField
+                day={day}
+                currentDate={currentDate}
+                events={events}
+                openModal={openModal}
+              />
             );
           })
         )}

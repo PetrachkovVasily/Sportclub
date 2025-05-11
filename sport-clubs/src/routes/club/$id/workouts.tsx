@@ -5,6 +5,7 @@ import saveBtn from "../../../assets/check-svgrepo-com 1.svg";
 import deleteBtn from "../../../assets/delete-1-svgrepo-com 1.svg";
 import {
   useAddClubActivityMutation,
+  useAddWorkoutMutation,
   useDeleteClubActivityMutation,
   useGetClubActivitiesQuery,
   useGetClubWorkoutsQuery,
@@ -45,16 +46,54 @@ function RouteComponent() {
     }
   };
 
+  const [wName, setWName] = useState("");
+  const [isWAdd, setIsWAdd] = useState(false);
+
+  const [createWorkout] = useAddWorkoutMutation();
+
+  const handleAddWorkout = async () => {
+    if (wName) {
+      createWorkout({ name: wName, club_id: [id] });
+      setWName("");
+      setIsWAdd(false);
+    }
+  };
+
   return (
     <article className="w-[100%] flex flex-col gap-[22px]">
       <div className="w-[100%] flex flex-col gap-[12px]">
         <h1 className="text-[22px] font-normal text-[#505050] ">Workouts:</h1>
         <div className="flex flex-col w-[100%] gap-[8px] px-[8px] ">
           {workouts?.map((item) => {
-            return <Accordion activities={activities} workout={item} />;
+            return (
+              <Accordion activities={activities} workout={item} key={item.id} />
+            );
           })}
 
-          <button className="mt-[4px] w-fit pl-[10px] pr-[4px] py-[2px] bg-white rounded-2xl border-[2px] border-[#404040]/12 flex">
+          {isWAdd && (
+            <div className="w-full flex gap-[4px] border-[2px] max-w-[200px] bg-white border-[#505050]/12  rounded-[4px]">
+              <input
+                type="text"
+                placeholder="Name"
+                value={wName}
+                onChange={(e) => setWName(e.target.value)}
+                className=" px-2 py-1 rounded-[4px] w-full"
+              />
+              <img
+                src={saveBtn}
+                onClick={handleAddWorkout}
+                className="cursor-pointer"
+                alt=""
+              />
+            </div>
+          )}
+
+          <button
+            onClick={() => {
+              setIsWAdd(!isWAdd);
+            }}
+            className="mt-[4px] w-fit pl-[10px] pr-[4px] py-[2px] bg-white rounded-2xl border-[2px] border-[#404040]/12 flex"
+          >
             Add
             <img src={addBtn} alt="" />
           </button>

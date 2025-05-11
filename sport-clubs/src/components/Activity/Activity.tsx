@@ -4,7 +4,14 @@ import deleteBtn from "../../assets/delete-1-svgrepo-com 1.svg";
 
 interface Props {}
 
-function Activity({ children, amount, approaches, setAmount, setApproaches }) {
+function Activity({
+  children,
+  amount,
+  approaches,
+  setAmount,
+  setApproaches,
+  handleDelete,
+}) {
   return (
     <div className="bg-white flex items-center justify-between p-[6px] px-[8px] rounded-[4px] w-[100%] ">
       <h3 className="text-[14px] font-semibold text-[#505050] ">{children}</h3>
@@ -16,7 +23,7 @@ function Activity({ children, amount, approaches, setAmount, setApproaches }) {
           onChange={setApproaches}
         />
       </div>
-      <button>
+      <button onClick={handleDelete}>
         <img className="w-[22px] " src={deleteBtn} alt="" />
       </button>
     </div>
