@@ -11,6 +11,8 @@ function EventList({
   startEditing,
   deleteEvent,
   isUser = true,
+  isMember = false,
+  isMain = false,
 }) {
   const [updateEvent] = useUpdateEventMutation();
   const { record: user } = JSON.parse(localStorage.getItem("pocketbase_auth"));
@@ -51,6 +53,7 @@ function EventList({
                 isUser={isUser}
                 startEditing={startEditing}
                 deleteEvent={deleteEvent}
+                isMember={isMain ? isMain : isMember}
               />
             </>
           ))}

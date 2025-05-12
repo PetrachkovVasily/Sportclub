@@ -10,7 +10,7 @@ function Modal({ children, closeModal }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white p-4 rounded-[8px] w-[400px] max-h-[90vh] overflow-y-auto"
+        className="bg-white p-4 rounded-[8px] w-[400px] max-h-[90vh]"
       >
         {children}
       </div>

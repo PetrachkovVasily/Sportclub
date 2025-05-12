@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import React, { useEffect, useRef, useState } from "react";
 import menuImg from "../../assets/menu-vertical-svgrepo-com 1.svg";
+import { useUpdateClubRequestsMutation } from "../../services/UserService";
 
 interface Props {}
 
@@ -10,6 +11,8 @@ function ClubLeaveJoin({
   handleUpdate,
   setMember = null,
 }) {
+  console.log(club);
+
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -29,6 +32,10 @@ function ClubLeaveJoin({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const { record: user } = JSON.parse(localStorage.getItem("pocketbase_auth"));
+
+  const [updateRec] = useUpdateClubRequestsMutation();
 
   return (
     <div className="flex items-center gap-[8px] ">
@@ -76,19 +83,45 @@ function ClubLeaveJoin({
         </>
       ) : (
         <>
-          <button
-            onClick={() => {
-              handleUpdate(club);
+          {club.status == "public" ? (
+            <button
+              onClick={() => {
+                handleUpdate(club);
 
-              setIsOpen(false);
-              if (setMember) {
-                setMember(true);
-              }
-            }}
-            className="w-[96px] px-[8px] py-[4px] rounded-[4px] font-bold bg-[#F2B749] text-white text-[14px]"
-          >
-            Join
-          </button>
+                setIsOpen(false);
+                if (setMember) {
+                  setMember(true);
+                }
+              }}
+              className="w-[96px] px-[8px] py-[4px] rounded-[4px] font-bold bg-[#F2B749] text-white text-[14px]"
+            >
+              Join
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                updateRec({
+                  clubId: club.id,
+                  newUserId: user.id,
+                  currentUsers: club.request_id,
+                  isAdd: true,
+                });
+                if (club.request_id.find((item) => item == user.id)) {
+                  updateRec({
+                    clubId: club.id,
+                    newUserId: user.id,
+                    currentUsers: club.request_id,
+                    isAdd: true,
+                  });
+                }
+              }}
+              className="w-[104px] px-[8px] py-[4px] rounded-[4px] font-bold bg-[#F2B749] text-white text-[14px]"
+            >
+              {club.request_id.find((item) => item == user.id)
+                ? "Request sent"
+                : "Send request"}
+            </button>
+          )}
         </>
       )}
     </div>

@@ -19,6 +19,7 @@ import Dropdown from "../../components/Dropdown/Dropdown";
 import UserItem from "../../components/UserItem/UserItem";
 import Line from "../../components/Line/Line";
 import pb from "../../lib/pocketbase";
+import UserReques from "../../components/UserItem/UserReques";
 
 export const Route = createFileRoute("/club/$id")({
   component: RouteComponent,
@@ -45,6 +46,9 @@ function RouteComponent() {
   const admins = useGetClubAdminsQuery(id)?.data?.items;
   const clubUsers = useGetClubUsersQuery(id)?.data?.user_id;
 
+  //requests
+  const requestUsers = useGetClubUsersQuery(id)?.data?.request_id;
+
   // const community = getUsers(id);
 
   // console.log(community);
@@ -55,7 +59,7 @@ function RouteComponent() {
 
   useEffect(() => {
     if (admins) {
-      setIsUser(!(admins.find((item) => item.admin_id == user.id) !== -1));
+      setIsUser(!admins.find((item) => item.admin_id == user.id));
     }
   }, [admins]);
 
@@ -69,8 +73,6 @@ function RouteComponent() {
   const closeModal = () => {
     setOpenUserList(false);
   };
-
-  console.log(clubUsers);
 
   return (
     <PageWrapper>
@@ -105,32 +107,51 @@ function RouteComponent() {
           {openUserList && (
             <Modal closeModal={closeModal}>
               <div className="w-full flex flex-col gap-[12px] font-semibold text-[18px] text-[#505050] ">
-                <Dropdown
-                  options={[
-                    { option: "members", name: "members" },
-                    { option: "requests", name: "requests" },
-                  ]}
-                  onChange={(e) => {
-                    console.log(e);
+                {!isUser ? (
+                  <Dropdown
+                    options={[
+                      { option: "members", name: "members" },
+                      { option: "requests", name: "requests" },
+                    ]}
+                    onChange={(e) => {
+                      console.log(e);
 
-                    setOptionValue(e);
-                  }}
-                  value={optionValue}
-                />
+                      setOptionValue(e);
+                    }}
+                    value={optionValue}
+                  />
+                ) : (
+                  <h3>Members</h3>
+                )}
+
                 <div className="w-full gap-[2px] flex flex-col ">
                   {optionValue == "members" ? (
                     <>
                       {clubUsers?.map((item, i, arr) => {
                         return (
-                          <>
-                            <UserItem id={item} />
+                          <div className="w-full" key={item}>
+                            <UserItem
+                              id={item}
+                              admins={admins || []}
+                              club={club}
+                              isNotAdmin={isUser}
+                            />
                             {i == arr.length - 1 || <Line />}
-                          </>
+                          </div>
                         );
                       })}
                     </>
                   ) : (
-                    <>{/* <UserItem requesting={true} /> */}</>
+                    <>
+                      {requestUsers?.map((item, i, arr) => {
+                        return (
+                          <div className="w-full" key={item}>
+                            <UserReques id={item} club={club} recUsers={arr} />
+                            {i == arr.length - 1 || <Line />}
+                          </div>
+                        );
+                      })}
+                    </>
                   )}
                 </div>
               </div>

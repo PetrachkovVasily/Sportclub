@@ -98,6 +98,7 @@ function RouteComponent() {
             startEditing={() => {}}
             deleteEvent={() => {}}
             isUser={true}
+            isMain={true}
           />
         </section>
       </article>

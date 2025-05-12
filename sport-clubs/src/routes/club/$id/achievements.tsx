@@ -41,11 +41,10 @@ function RouteComponent() {
 
   useEffect(() => {
     if (admins) {
-      setIsUser(!(admins.find((item) => item.admin_id == user.id) !== -1));
+      setIsUser(!admins.find((item) => item.admin_id == user.id));
     }
   }, [admins]);
   ///////////////////
-  console.log(isUser);
 
   return (
     <article className="w-[100%] flex flex-col gap-[12px]">

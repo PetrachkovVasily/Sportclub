@@ -110,7 +110,7 @@ function Accordion({ activities, workout }) {
                     }}
                     className="w-[96px] px-[8px] py-[2px] rounded-[4px] font-bold bg-white border-[2px] border-red-700 hover:bg-red-700 text-[12px]"
                   >
-                    Laeve
+                    Delete
                   </button>
                 </div>
               )}

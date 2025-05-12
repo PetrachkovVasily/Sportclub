@@ -143,12 +143,14 @@ export const userAPI = createApi({
           },
         };
       },
+      providesTags: ["Club"],
     }),
 
     getSingleClub: build.query({
       query: (clubId) => ({
         url: `/club/records/${clubId}`,
       }),
+      providesTags: ["Club"],
     }),
 
     updateClubUsers: build.mutation({
@@ -174,6 +176,35 @@ export const userAPI = createApi({
           },
         };
       },
+      invalidatesTags: ["Club"],
+    }),
+
+    updateClubRequests: build.mutation({
+      query: ({ clubId, newUserId, currentUsers, isAdd = false }) => {
+        if (!isAdd) {
+          const updated = currentUsers.filter((id) => id !== newUserId);
+
+          return {
+            url: `/club/records/${clubId}`,
+            method: "PATCH",
+            body: {
+              request_id: updated,
+            },
+          };
+        } else {
+          const updated = Array.from(
+            new Set([...(currentUsers || []), newUserId])
+          );
+          return {
+            url: `/club/records/${clubId}`,
+            method: "PATCH",
+            body: {
+              request_id: updated,
+            },
+          };
+        }
+      },
+      invalidatesTags: ["Club"],
     }),
 
     getClubActivities: build.query({
@@ -411,6 +442,24 @@ export const userAPI = createApi({
           expand: "club_id",
         },
       }),
+      providesTags: ["Club"],
+    }),
+
+    deleteAdmin: build.mutation({
+      query: (postId) => ({
+        url: `/admin/records/${postId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Club"],
+    }),
+
+    addAdmin: build.mutation({
+      query: (postData) => ({
+        url: `/admin/records`,
+        method: "POST",
+        body: postData,
+      }),
+      invalidatesTags: ["Club"],
     }),
 
     getClubUsers: build.query({
@@ -420,10 +469,24 @@ export const userAPI = createApi({
           expand: "user_id",
         },
       }),
+      providesTags: ["Club"],
+    }),
+
+    getRequestUsers: build.query({
+      query: (clubId) => ({
+        url: `/club/records/${clubId}`,
+        params: {
+          expand: "request_id",
+        },
+      }),
+      providesTags: ["Club"],
     }),
   }),
 });
 export const {
+  useUpdateClubRequestsMutation,
+  useAddAdminMutation,
+  useDeleteAdminMutation,
   useGetClubUsersQuery,
   useGetClubAdminsQuery,
 
