@@ -19,22 +19,12 @@ interface Props {}
 function Header() {
   const [openCreateClub, setOpenCreateClub] = useState(false);
 
-  // const userId = useSelector((state: RootState) => state.authReducer.userId);
-  // const token = useSelector((state: RootState) => state.authReducer.token);
-
-  // const {
-  //   data: user,
-  //   isLoading: isUserLoading,
-  //   error,
-  // } = useFetchUserQuery(userId!, {
-  //   skip: !token || !userId,
-  // });
-
   const closeModal = () => {
     setOpenCreateClub(false);
   };
 
-  const user = JSON.parse(localStorage.getItem("pocketbase_auth"));
+  const user = JSON.parse(localStorage.getItem("pocketbase_auth"))?.record;
+  // console.log(user);
 
   return (
     <Navbar fluid className="fixed w-[100%] z-50 shadow-md">
@@ -44,47 +34,51 @@ function Header() {
           Coach potato
         </span>
       </div>
-      <NavbarToggle />
-      <NavbarCollapse>
-        <Link
-          className="p-[4px] flex items-center md:justify-center justify-start"
-          to="/profile/$id/stats"
-          params={{ id: user.record.id }}
-        >
-          Profile
-        </Link>
-        <Link
-          className="p-[4px] flex items-center md:justify-center justify-start"
-          to={"/trainings"}
-        >
-          Trainings
-        </Link>
-        <Link
-          className="p-[4px] flex items-center md:justify-center justify-start"
-          to={"/calendar"}
-        >
-          Schedule
-        </Link>
-        <Link
-          className="p-[4px] flex items-center md:justify-center justify-start"
-          to={"/clubsList"}
-        >
-          Clubs
-        </Link>
-        <div className="mt-[8px] md:mt-0">
-          <ActionBtn
-            onClick={() => {
-              setOpenCreateClub(true);
-            }}
-          >
-            Create club
-          </ActionBtn>
-        </div>
-      </NavbarCollapse>
-      {openCreateClub && (
-        <Modal closeModal={closeModal}>
-          <CreateClubModal />
-        </Modal>
+      {user && (
+        <>
+          <NavbarToggle />
+          <NavbarCollapse>
+            <Link
+              className="p-[4px] flex items-center md:justify-center justify-start"
+              to="/profile/$id/stats"
+              params={{ id: user.id }}
+            >
+              Profile
+            </Link>
+            <Link
+              className="p-[4px] flex items-center md:justify-center justify-start"
+              to={"/trainings"}
+            >
+              Trainings
+            </Link>
+            <Link
+              className="p-[4px] flex items-center md:justify-center justify-start"
+              to={"/calendar"}
+            >
+              Schedule
+            </Link>
+            <Link
+              className="p-[4px] flex items-center md:justify-center justify-start"
+              to={"/clubsList"}
+            >
+              Clubs
+            </Link>
+            <div className="mt-[8px] md:mt-0">
+              <ActionBtn
+                onClick={() => {
+                  setOpenCreateClub(true);
+                }}
+              >
+                Create club
+              </ActionBtn>
+            </div>
+          </NavbarCollapse>
+          {openCreateClub && (
+            <Modal closeModal={closeModal}>
+              <CreateClubModal closeModal={closeModal} userId={user.id} />
+            </Modal>
+          )}
+        </>
       )}
     </Navbar>
   );

@@ -7,30 +7,30 @@ import SwitchMenu from "../../components/SwitchMenu/SwitchMenu";
 import Achievements from "../../components/Achievements/Achievements";
 import { useEffect, useState } from "react";
 import Modal from "../../components/Modal/Modal";
-import { useFetchUserQuery, userAPI } from "../../services/UserService";
+import {
+  useFetchUserQuery,
+  useGetUserWorkoutsActivitiesQuery,
+  userAPI,
+} from "../../services/UserService";
 import { postAPI } from "../../services/PostService";
 import pb from "../../lib/pocketbase";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
+import UserAchievementsList from "../../components/Achievements/UserAchievementsList";
 
 export const Route = createFileRoute("/profile/$id")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  // const dispatch = useDispatch();
-  // const token = useSelector((state: RootState) => state.authReducer.token);
-  // const userId = useSelector((state: RootState) => state.authReducer.userId);
-
-  // const {
-  //   data: user,
-  //   isLoading: isUserLoading,
-  //   error,
-  // } = useFetchUserQuery(userId!, {
-  //   skip: !token || !userId,
-  // });
-
   const { id } = Route.useParams();
+
+  console.log(id);
+
+  const userWorkoutsActivities =
+    useGetUserWorkoutsActivitiesQuery(id)?.data?.items;
+
+  console.log(userWorkoutsActivities);
 
   const menuList = [
     { name: "Stats", link: "/profile/$id/stats", id: id },
@@ -46,6 +46,23 @@ function RouteComponent() {
   const openModal = () => {
     setOpenAch(true);
   };
+
+  const [userAchievements, setUserAchievements] = useState([]);
+
+  async function getAchs() {
+    const userAchievements = await pb
+      .collection("userAchievement")
+      .getFullList({
+        filter: `user_id = "${id}" && recieved = true`,
+        expand: "achievement_id",
+        perPage: 500,
+      });
+    setUserAchievements(userAchievements);
+  }
+
+  useEffect(() => {
+    getAchs();
+  }, []);
 
   return (
     <PageWrapper>
@@ -63,22 +80,24 @@ function RouteComponent() {
       </div>
       <div className="max-w-[280px] w-[100%]">
         <ContentContainer gap={22} pb={16}>
-          <Achievements
-            userAchAmount={8}
-            clubAchAmount={16}
-            openModal={openModal}
-          />
+          {userAchievements && (
+            <Achievements
+              userAchievements={userAchievements}
+              userAchAmount={8}
+              clubAchAmount={16}
+              openModal={openModal}
+            />
+          )}
         </ContentContainer>
       </div>
       {openAch && (
         <Modal closeModal={closeModal}>
           <div className="flex flex-col w-full items-center gap-[18px] pb-[12px] ">
-            <Achievements
+            <UserAchievementsList
               isClub={false}
               isModal={true}
-              userAchAmount={8}
-              clubAchAmount={16}
               openModal={openModal}
+              userAchievements={userAchievements}
             />
           </div>
         </Modal>

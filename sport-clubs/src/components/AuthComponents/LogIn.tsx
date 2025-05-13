@@ -7,6 +7,7 @@ import {
 } from "../../services/UserService";
 import pb from "../../lib/pocketbase";
 import { logout, setCredentials } from "../../store/reducers/AuthSlice";
+import { useNavigate } from "@tanstack/react-router";
 
 interface Props {}
 
@@ -15,8 +16,8 @@ function LogIn({}) {
   const token = useSelector((state: RootState) => state.authReducer.token);
   const userId = useSelector((state: RootState) => state.authReducer.userId);
 
-  const [email, setEmail] = useState("vasyapt@gmail.com");
-  const [password, setPassword] = useState("12345678");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [login, { isLoading: isLoggingIn }] = useLoginMutation();
 
   const isLoggedIn = pb.authStore.isValid;
@@ -29,6 +30,7 @@ function LogIn({}) {
   } = useFetchUserQuery(userId!, {
     skip: !token || !userId,
   });
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
@@ -44,7 +46,7 @@ function LogIn({}) {
       // localStorage.setItem("token", res.token);
       // localStorage.setItem("userId", res.record.id);
 
-      console.log(12345);
+      navigate({ to: "/clubsList" });
     } catch (err) {
       console.error("Login failed", err);
     }
@@ -91,12 +93,12 @@ function LogIn({}) {
       >
         {"Log in"}
       </button>
-      <button
+      {/* <button
         onClick={handleLogout}
         className="rounded-[8px] w-full h-[30px] text-[16px] font-bold bg-[#F2B749] text-white "
       >
         {"Log out"}
-      </button>
+      </button> */}
     </>
   );
 }

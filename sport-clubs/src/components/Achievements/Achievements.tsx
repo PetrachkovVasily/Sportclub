@@ -18,6 +18,8 @@ function Achievements({
   clubAchAmount,
   openModal = () => {},
   clubId = null,
+  userAchievements = [],
+  notUserAchievements = [],
 }) {
   return (
     <>
@@ -25,28 +27,40 @@ function Achievements({
         <div className="flex justify-center items-center rounded-[40px] w-[64px] h-[64px] border-solid border-[2px] border-[#404040]/15 ">
           <img src={cupImg} alt="cup" />
         </div>
-        <NumInfo headNum={16} info={"Achievements"} />
+        <NumInfo headNum={userAchievements.length} info={"Achievements"} />
         {isClub ? (
           <div className="flex flex-col gap-[4px] items-center p-[8px] w-[100%] mt-[8px]">
             <h3 className="text-[#505050] text-[14px] ">
-              You have <b>{userAchAmount}</b> of <b>{clubAchAmount}</b>
+              You have <b>{userAchievements.length}</b> of{" "}
+              <b>{clubAchAmount}</b>
             </h3>{" "}
-            <ProgressBar fillWidth={45} />
+            <ProgressBar
+              fillWidth={(userAchievements.length / clubAchAmount) * 100}
+            />
           </div>
         ) : (
           <></>
         )}
       </div>
       <div className="flex flex-col px-[8px] gap-[8px] w-[100%]">
-        <div className="flex flex-col gap-[8px] w-[100%] max-w-[232px]">
-          <Achievement name={"Super-runner"} info={"run throw 60km 6 times"} />
-        </div>
-        {isModal || <AchList />}
+        {!!userAchAmount && (
+          <div className="flex flex-col gap-[8px] w-[100%] max-w-[232px]">
+            <Achievement
+              name={userAchievements[0]?.expand.achievement_id.name}
+              info={userAchievements[0]?.expand.achievement_id.description}
+            />
+          </div>
+        )}
+        {isModal || <AchList userAchievements={userAchievements} />}
 
         {isClub ? (
           <div className="flex flex-col gap-[6px] mb-[6px]">
             <h3 className="text-[#505050] text-[14px] ">Not received</h3>
-            <AchList isClub={isClub} />
+            <AchList
+              isClub={isClub}
+              userAchievements={notUserAchievements}
+              isNot={true}
+            />
           </div>
         ) : (
           <></>

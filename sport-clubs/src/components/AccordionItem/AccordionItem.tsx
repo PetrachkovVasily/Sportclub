@@ -44,16 +44,20 @@ function AccordionItem({ activities, workoutActivity }) {
       setApproaches={setApproaches}
       handleDelete={handleDelete}
     >
-      {!!activities[0].name && (
-        <Dropdown
-          options={activities?.map((item) => {
-            return { value: item.name, name: item.name };
-          })}
-          //   onChange={}
-          width={undefined}
-          value={activityField}
-          onChange={setActivityField}
-        />
+      {activities && (
+        <>
+          {!!activities[0].name && (
+            <Dropdown
+              options={activities?.map((item) => {
+                return { value: item.name, name: item.name };
+              })}
+              //   onChange={}
+              width={undefined}
+              value={activityField}
+              onChange={setActivityField}
+            />
+          )}
+        </>
       )}
     </Activity>
   );

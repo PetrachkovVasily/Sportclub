@@ -73,8 +73,9 @@ function SearchBar({ onFilter, filters, setFilters }) {
           <div className="border-[2px] bg-white border-[#505050]/12 rounded-[4px] text-[14px] ">
             <Dropdown
               onChange={(e) => {
-                handleChange("status", e.target.value);
+                handleChange("status", e);
               }}
+              value={filters.status}
               options={[
                 { option: "no status", name: "no status" },
                 { option: "public", name: "public" },
@@ -86,8 +87,9 @@ function SearchBar({ onFilter, filters, setFilters }) {
 
           <div className="border-[2px]  bg-white border-[#505050]/12 rounded-[4px] text-[14px] ">
             <Dropdown
+              value={filters.category}
               onChange={(e) => {
-                handleChange("category", e.target.value);
+                handleChange("category", e);
               }}
               options={clubCategories.map((item) => {
                 return { option: item, name: item };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dropdown from "../Dropdown/Dropdown";
 import Activity from "../Activity/Activity";
 import { Checkbox } from "flowbite-react";
@@ -6,8 +6,18 @@ import Approach from "../Approach/Approach";
 
 interface Props {}
 
-function ActivityAccordion({}) {
+function ActivityAccordion({ workoutActivity, workoutValue, setWorkoutValue }) {
   const [hideControl, setHideControl] = useState("hidden");
+  const [approachesA, setAppr] = useState(0);
+
+  // useEffect(() => {
+  //   for (let i = 0; i < workoutActivity.approaches; i++) {
+  //     setAppr([
+  //       ...approachesA,
+  //       { workoutActivity: workoutActivity.id, amount: 0 },
+  //     ]);
+  //   }
+  // }, []);
 
   return (
     <div id="accordion-collapse" data-accordion="collapse" className="w-[100%]">
@@ -22,10 +32,13 @@ function ActivityAccordion({}) {
             setHideControl(hideControl == "" ? "hidden" : "");
           }}
         >
-          <span>Activity 1</span>
+          <span>{workoutActivity.activity}</span>
           <div className="flex gap-[12px] items-center ">
             <h3 className="text-[#505050] text-[14px] ">
-              approaches <b>1/5</b>
+              approaches{" "}
+              <b>
+                {approachesA}/{workoutActivity.approaches}
+              </b>
             </h3>
             <svg
               data-accordion-icon
@@ -40,9 +53,9 @@ function ActivityAccordion({}) {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M9 5 5 1 1 5"
               />
             </svg>
@@ -54,11 +67,24 @@ function ActivityAccordion({}) {
         className={hideControl}
         aria-labelledby="accordion-collapse-heading-1"
       >
-        <Approach />
-        <Approach />
-        <Approach />
-        <Approach />
-        <Approach />
+        {(() => {
+          const approaches = [];
+          for (let i = 0; i < workoutActivity.approaches; i++) {
+            approaches.push(workoutActivity);
+          }
+          return approaches.map((item, i) => {
+            return (
+              <Approach
+                workoutActivity={item}
+                workoutValue={workoutValue}
+                setWorkoutValue={setWorkoutValue}
+                num={i + 1}
+                setAppr={setAppr}
+                approaches={approachesA}
+              />
+            );
+          });
+        })()}
       </div>
     </div>
   );

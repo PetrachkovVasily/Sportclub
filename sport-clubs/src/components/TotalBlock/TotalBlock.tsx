@@ -11,12 +11,12 @@ function TotalBlock(props: Props) {
       <h1 className="text-[22px] text-[#505050]">Total</h1>
       <div className="flex gap-[32px] w-[100%] ">
         <NumInfo
-          headNum={"80h"}
+          headNum={"16h"}
           info={"Training time"}
           headSize={22}
           infoSize={16}
         />
-        <NumInfo headNum={"42"} info={"Workouts"} headSize={22} infoSize={16} />
+        <NumInfo headNum={"12"} info={"Workouts"} headSize={22} infoSize={16} />
       </div>
     </div>
   );

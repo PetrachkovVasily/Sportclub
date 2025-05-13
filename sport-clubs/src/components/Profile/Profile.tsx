@@ -3,6 +3,11 @@ import Line from "../Line/Line";
 import NumInfo from "../NumInfo/NumInfo";
 import WeekDay from "../WeekDay/WeekDay";
 import profileImg from "../../assets/profileImg.png";
+import logoutImg from "../../assets/logout-svgrepo-com 1.svg";
+import { useNavigate } from "@tanstack/react-router";
+import { useDispatch } from "react-redux";
+
+import { logout, setCredentials } from "../../store/reducers/AuthSlice";
 
 interface Props {}
 
@@ -14,9 +19,23 @@ function Profile({}) {
   const d = new Date();
   const n = d.getDay();
 
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
+  function Leave() {
+    navigate({ to: "/auth" });
+    dispatch(logout());
+  }
+
   return (
     <>
-      <div className="flex flex-col gap-[8px] w-[100%] items-center">
+      <div className="flex flex-col gap-[8px] w-[100%] items-center relative ">
+        <img
+          onClick={Leave}
+          className="absolute right-0 cursor-pointer "
+          src={logoutImg}
+        />
         <img
           src={profileImg}
           alt="User"
@@ -25,7 +44,7 @@ function Profile({}) {
         <div className="flex flex-col gap-[4px] w-[100%] items-center">
           <h1 className="font-semibold text-[24px]">{user.login}</h1>
           <div className="flex justify-center w-[100%]">
-            <NumInfo headNum={2} info={"Clubs"} isLink={true}/>
+            <NumInfo headNum={2} info={"Clubs"} isLink={true} />
           </div>
         </div>
       </div>

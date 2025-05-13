@@ -38,7 +38,7 @@ function Goals({ userId, isFull = false }) {
     }
   };
 
-  const handleAdd = async () => {};
+  const [type, setType] = useState("");
 
   return (
     <>
@@ -49,6 +49,7 @@ function Goals({ userId, isFull = false }) {
             isChanging={isChanging}
             head={"Week"}
             openModal={openModal}
+            setType={setType}
           >
             {weekGoals?.length ? (
               weekGoals?.map((goal, index) => {
@@ -86,8 +87,9 @@ function Goals({ userId, isFull = false }) {
         {(!!monthGoals?.length || isFull) && (
           <GoalCategory
             isChanging={isChanging}
-            head={"Week"}
+            head={"Month"}
             openModal={openModal}
+            setType={setType}
           >
             {monthGoals?.length ? (
               monthGoals?.map((goal, index) => {
@@ -127,6 +129,7 @@ function Goals({ userId, isFull = false }) {
             isChanging={isChanging}
             head={"Year"}
             openModal={openModal}
+            setType={setType}
           >
             {yearGoals?.length ? (
               yearGoals?.map((goal, index) => {
@@ -182,7 +185,7 @@ function Goals({ userId, isFull = false }) {
 
       {openCreateGoal && (
         <Modal closeModal={closeModal}>
-          <GoalForm />
+          <GoalForm userId={userId} type={type} closeModal={closeModal} />
         </Modal>
       )}
     </>

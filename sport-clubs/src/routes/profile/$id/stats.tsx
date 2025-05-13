@@ -6,5 +6,6 @@ export const Route = createFileRoute("/profile/$id/stats")({
 });
 
 function RouteComponent() {
-  return <CompleteInfo />;
+  const { id } = Route.useParams();
+  return <CompleteInfo id={id} />;
 }

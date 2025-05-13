@@ -15,9 +15,9 @@ function EventItem({
   deleteEvent,
   isMember,
 }) {
-  const [isSigned, setIsSigned] = useState(
-    ev.expand.user_id?.indexOf(user.id) == -1
-  );
+  console.log(ev.user_id.length);
+
+  const [isSigned, setIsSigned] = useState(ev.user_id?.indexOf(user.id) == -1);
 
   return (
     <li
@@ -32,7 +32,7 @@ function EventItem({
 
       <div className="flex justify-end gap-2 mt-1">
         <div className="w-full flex ">
-          <h3 className="font-semibold mr-[2px] text-[12px]">{`(${ev.expand.user_id?.length || 0})`}</h3>
+          <h3 className="font-semibold mr-[2px] text-[12px]">{`(${ev.user_id?.length})`}</h3>
           {selectedDate.isBefore(dayjs().startOf("day")) || (
             <>
               {isMember && (
@@ -51,7 +51,7 @@ function EventItem({
                   className="font-semibold text-[12px] w-fit mr-auto"
                 >
                   <div className="flex items-center gap-[2px]">
-                    {isSigned ? "Unsign" : "Sign"}
+                    {!isSigned ? "Unsign" : "Sign"}
                     <img className="w-[16px]" src={editBtn} alt="" />
                   </div>
                 </button>

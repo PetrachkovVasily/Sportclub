@@ -11,7 +11,7 @@ function ClubItem({ isMember = false, club, handleUpdate }) {
   return (
     <div className="flex gap-[12px] w-[100%] p-[8px] items-center justify-between ">
       <div className="flex gap-[12px] w-[100%] items-center">
-        <Link to="/club/$id/rating" params={{ id: club.id }}>
+        <Link to="/club/$id/schedule" params={{ id: club.id }}>
           <img
             src={profileImg}
             alt="AchImg"
@@ -20,7 +20,7 @@ function ClubItem({ isMember = false, club, handleUpdate }) {
         </Link>
         <div className="w-[100%] flex flex-col max-w-[186px] text-ellipsis overflow-hidden">
           <div className="flex items-center gap-[8px]">
-            <Link to="/club/$id/rating" params={{ id: club.id }}>
+            <Link to="/club/$id/schedule" params={{ id: club.id }}>
               <h2 className="font-semibold text-[18px] text-nowrap text-ellipsis overflow-hidden">
                 {club.name}
               </h2>

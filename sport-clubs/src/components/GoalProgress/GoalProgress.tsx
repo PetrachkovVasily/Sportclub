@@ -12,7 +12,7 @@ function GoalProgress({ name, progress, limit }) {
           {progress + "/" + limit}
         </h3>
       </div>
-      <ProgressBar fillWidth={progress} />
+      <ProgressBar fillWidth={(progress / limit) * 100} />
     </div>
   );
 }

@@ -11,8 +11,6 @@ function ClubLeaveJoin({
   handleUpdate,
   setMember = null,
 }) {
-  console.log(club);
-
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -41,11 +39,11 @@ function ClubLeaveJoin({
     <div className="flex items-center gap-[8px] ">
       {isMember ? (
         <>
-          <Link to={"/chat/$id"} params={{ id: club.id }}>
+          {/* <Link to={"/chat/$id"} params={{ id: club.id }}>
             <button className="w-[96px] px-[8px] py-[4px] rounded-[4px] font-bold bg-[#F2B749] text-white text-[14px]">
               Chat
             </button>
-          </Link>
+          </Link> */}
 
           <div
             ref={dropdownRef}

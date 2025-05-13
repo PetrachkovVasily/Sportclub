@@ -3,6 +3,7 @@ import backgroundImg from "../../assets/back.png";
 import ActionBtn from "../ActionBtn/ActionBtn";
 import ClubLeaveJoin from "../ClubLeaveJoin/ClubLeaveJoin";
 import { useUpdateClubUsersMutation } from "../../services/UserService";
+import pb from "../../lib/pocketbase";
 
 interface Props {}
 
@@ -12,7 +13,61 @@ function ClubHead({ club, isUser }) {
   const [updateClubUsers] = useUpdateClubUsersMutation();
   const [member, setMember] = useState(findUser());
 
+  async function createUserAchievementsFromClub(userId, clubId) {
+    try {
+      // 1. Получить все достижения клуба
+      const clubAchievements = await pb.collection("achievement").getFullList({
+        filter: `club_id = "${clubId}"`,
+      });
+
+      if (clubAchievements.length === 0) {
+        console.log("Нет достижений у клуба");
+        return [];
+      }
+
+      // 2. Получить все достижения пользователя
+      const userAchievements = await pb
+        .collection("userAchievement")
+        .getFullList({
+          filter: `user_id = "${userId}"`,
+        });
+
+      // 3. Определить уже существующие связи с clubAchievement_id
+      const existingClubAchievementIds = new Set(
+        userAchievements.map((ua) => ua.achievement_id)
+      );
+
+      // 4. Отфильтровать только новые достижения
+      const newAchievements = clubAchievements.filter(
+        (ca) => !existingClubAchievementIds.has(ca.id)
+      );
+
+      if (newAchievements.length === 0) {
+        console.log("Все достижения уже созданы");
+        return [];
+      }
+
+      // 5. Создать пользовательские достижения
+      const createdAchievements = await Promise.all(
+        newAchievements.map((ca) =>
+          pb.collection("userAchievement").create({
+            user_id: userId,
+            achievement_id: ca.id,
+          })
+        )
+      );
+
+      console.log("Созданы пользовательские достижения:", createdAchievements);
+      return createdAchievements;
+    } catch (error) {
+      console.error("Ошибка создания пользовательских достижений:", error);
+      throw error;
+    }
+  }
+
   const handleUpdate = (club, isRemove = false) => {
+    createUserAchievementsFromClub(user.id, club.id);
+
     try {
       updateClubUsers({
         clubId: club.id,

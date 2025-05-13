@@ -9,9 +9,7 @@ import Chart from "../Chart/Chart";
 
 interface Props {}
 
-function CompleteInfo(props: Props) {
-  const {} = props;
-
+function CompleteInfo({ id }) {
   const values = {
     "2016-06-23": 1,
     "2016-05-26": 2,

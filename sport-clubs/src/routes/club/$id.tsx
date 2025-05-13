@@ -11,6 +11,7 @@ import SwitchMenu from "../../components/SwitchMenu/SwitchMenu";
 import Modal from "../../components/Modal/Modal";
 import { useEffect, useState } from "react";
 import {
+  useGetClubAchievementsQuery,
   useGetClubAdminsQuery,
   useGetClubUsersQuery,
   useGetSingleClubQuery,
@@ -20,6 +21,7 @@ import UserItem from "../../components/UserItem/UserItem";
 import Line from "../../components/Line/Line";
 import pb from "../../lib/pocketbase";
 import UserReques from "../../components/UserItem/UserReques";
+import pb1 from "../../lib/p1";
 
 export const Route = createFileRoute("/club/$id")({
   component: RouteComponent,
@@ -35,7 +37,7 @@ function RouteComponent() {
   const { id } = Route.useParams();
 
   const menuList = [
-    { name: "Rating", link: "/club/$id/rating", id: id },
+    // { name: "Rating", link: "/club/$id/rating", id: id },
     { name: "Schedule", link: "/club/$id/schedule", id: id },
     { name: "Workouts", link: "/club/$id/workouts", id: id },
     { name: "Achievements", link: "/club/$id/achievements", id: id },
@@ -73,6 +75,40 @@ function RouteComponent() {
   const closeModal = () => {
     setOpenUserList(false);
   };
+
+  const [userAchievements, setUserAchievements] = useState([]);
+
+  async function getAchs() {
+    const userAchievements = await pb
+      .collection("userAchievement")
+      .getFullList({
+        filter: `user_id = "${user.id}" && recieved = true`,
+        expand: "achievement_id",
+        perPage: 500,
+      });
+    setUserAchievements(userAchievements);
+  }
+
+  const [notUserAchievements, setNotUserAchievements] = useState([]);
+
+  async function getNotAchs() {
+    const achievements = await pb1.collection("userAchievement").getFullList({
+      filter: `user_id = "${user.id}" && recieved = false`,
+      expand: "achievement_id",
+      perPage: 500,
+    });
+    setNotUserAchievements(achievements);
+  }
+
+  useEffect(() => {
+    getAchs();
+    getNotAchs();
+  }, []);
+
+  // console.log(notUserAchievements);
+  // console.log(userAchievements);
+
+  const clubAchievements = useGetClubAchievementsQuery(id)?.data?.items;
 
   return (
     <PageWrapper>
@@ -159,12 +195,20 @@ function RouteComponent() {
           )}
         </section>
         <ContentContainer gap={22} pb={16}>
-          <Achievements
-            isClub={true}
-            userAchAmount={8}
-            clubAchAmount={16}
-            clubId={club?.id}
-          />
+          {userAchievements && notUserAchievements && (
+            <>
+              {clubAchievements && (
+                <Achievements
+                  isClub={true}
+                  userAchAmount={userAchievements.length}
+                  clubAchAmount={clubAchievements.length}
+                  clubId={club?.id}
+                  userAchievements={userAchievements}
+                  notUserAchievements={notUserAchievements}
+                />
+              )}
+            </>
+          )}
         </ContentContainer>
       </article>
     </PageWrapper>

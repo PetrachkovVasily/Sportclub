@@ -12,7 +12,7 @@ function AchForm({ id, activities, closeModal }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [activity, setActivity] = useState(activities[0].name);
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(1);
 
   const [addAchievement] = useAddClubAchievementMutation();
 

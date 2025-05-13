@@ -12,6 +12,9 @@ import {
   useGetClubActivitiesQuery,
   useGetClubAdminsQuery,
 } from "../../../services/UserService";
+import pb from "../../../lib/pocketbase";
+import pb2 from "../../../lib/p2";
+import pb3 from "../../../lib/p3";
 
 export const Route = createFileRoute("/club/$id/achievements")({
   component: RouteComponent,
@@ -46,6 +49,38 @@ function RouteComponent() {
   }, [admins]);
   ///////////////////
 
+  const [userAchievements, setUserAchievements] = useState([]);
+
+  async function getAchs() {
+    const userAchievements = await pb2
+      .collection("userAchievement")
+      .getFullList({
+        filter: `user_id = "${user.id}" && recieved = true`,
+        expand: "achievement_id",
+        perPage: 500,
+      });
+    setUserAchievements(userAchievements);
+  }
+  useEffect(() => {
+    getAchs();
+    getNotAchs();
+  }, []);
+
+  const [notUserAchievements, setNotUserAchievements] = useState([]);
+
+  async function getNotAchs() {
+    const achievements = await pb3.collection("userAchievement").getFullList({
+      filter: `user_id = "${user.id}" && recieved = false`,
+      expand: "achievement_id",
+      perPage: 500,
+    });
+    setNotUserAchievements(achievements);
+  }
+
+  console.log(userAchievements);
+
+  const clubAchievements = useGetClubAchievementsQuery(id)?.data?.items;
+
   return (
     <article className="w-[100%] flex flex-col gap-[12px]">
       <h1 className="text-[22px] font-normal text-[#505050] ">Achiviements:</h1>
@@ -53,22 +88,66 @@ function RouteComponent() {
         <div className="flex flex-col w-[100%] gap-[8px] px-[12px] ">
           <div className="w-[100%] flex justify-between ">
             <h3 className="text-[16px] font-semibold text-[#505050] ">
-              8 of 16 achievements earned
+              {userAchievements?.length} of {clubAchievements?.length}{" "}
+              achievements earned
             </h3>
-            <h3 className="text-[16px] font-semibold text-[#505050] ">(50%)</h3>
+            <h3 className="text-[16px] font-semibold text-[#505050] ">
+              (
+              {(userAchievements?.length / clubAchievements?.length) * 100 > 100
+                ? 100
+                : Math.round(
+                    (userAchievements?.length / clubAchievements?.length) * 100
+                  )}
+              %)
+            </h3>
           </div>
-          <ProgressBar fillWidth={50} />
+          <ProgressBar
+            fillWidth={
+              (userAchievements?.length / clubAchievements?.length) * 100 > 100
+                ? 100
+                : (userAchievements?.length / clubAchievements?.length) * 100
+            }
+          />
         </div>
         <div className="w-[100%] flex flex-col gap-[6px] px-[12px]  ">
-          {achievements?.map((item) => {
+          {userAchievements?.map((item) => {
             return (
               <ClubAch
-                key={item.id}
-                name={item.name}
-                info={item.description}
-                date={item.activity}
-                progress={50}
-                id={item.id}
+                key={item.expand.achievement_id.id}
+                name={item.expand.achievement_id.name}
+                info={item.expand.achievement_id.description}
+                date={item.expand.achievement_id.activity}
+                progress={
+                  item.recieved
+                    ? 100
+                    : (item.currentAmount / item.expand.achievement_id.limit) *
+                      100
+                }
+                id={item.expand.achievement_id.id}
+                isUser={isUser}
+              />
+            );
+          })}
+          {notUserAchievements?.map((item) => {
+            console.log(
+              item.recieved
+                ? 100
+                : (item.currentAmount / item.expand.achievement_id.limit) * 100
+            );
+
+            return (
+              <ClubAch
+                key={item.expand.achievement_id.id}
+                name={item.expand.achievement_id.name}
+                info={item.expand.achievement_id.description}
+                date={item.expand.achievement_id.activity}
+                progress={
+                  item.recieved
+                    ? 100
+                    : (item.currentAmount / item.expand.achievement_id.limit) *
+                      100
+                }
+                id={item.expand.achievement_id.id}
                 isUser={isUser}
               />
             );

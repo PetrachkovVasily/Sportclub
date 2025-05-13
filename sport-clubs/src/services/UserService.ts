@@ -44,6 +44,17 @@ export const userAPI = createApi({
       }),
     }),
 
+    getUserActivityGoals: build.query({
+      query: (userId, activity_name) => ({
+        url: "/goal/records",
+        params: {
+          filter: `user_id="${userId}" && activity_name="${activity_name}"`,
+          expand: "user_id",
+        },
+      }),
+      providesTags: ["Goal"],
+    }),
+
     getUserGoals: build.query({
       query: (userId) => ({
         url: "/goal/records",
@@ -87,6 +98,15 @@ export const userAPI = createApi({
       providesTags: ["Goal"],
     }),
 
+    addUserGoals: build.mutation({
+      query: (postData) => ({
+        url: `/goal/records`,
+        method: "POST",
+        body: postData,
+      }),
+      invalidatesTags: ["Goal"],
+    }),
+
     deleteGoal: build.mutation({
       query: (postId) => ({
         url: `/goal/records/${postId}`,
@@ -96,6 +116,31 @@ export const userAPI = createApi({
     }),
 
     getUserClubs: build.query({
+      query: ({ userId, name, category, status, country, city }) => {
+        const filters: string[] = [];
+
+        // console.log(userId, name, category, status, country, city);
+
+        if (name) filters.push(`name ~ "${name}"`);
+        if (country) filters.push(`country ~ "${country}"`);
+        if (city) filters.push(`city ~ "${city}"`);
+        if (category && category != "no category")
+          filters.push(`category = "${category}"`);
+        if (status && status != "no status") filters.push(`status="${status}"`);
+        return {
+          url: "/club/records",
+          params: {
+            filter:
+              `user_id~"${userId}"` +
+              (filters.length ? " && " : "") +
+              filters.join(" && "),
+            expand: "user_id",
+          },
+        };
+      },
+    }),
+
+    getThisUserClubs: build.query({
       query: ({ userId, name, category, status, country, city }) => {
         const filters: string[] = [];
 
@@ -151,6 +196,14 @@ export const userAPI = createApi({
         url: `/club/records/${clubId}`,
       }),
       providesTags: ["Club"],
+    }),
+
+    addClub: build.mutation({
+      query: (postData) => ({
+        url: `/club/records`,
+        method: "POST",
+        body: postData,
+      }),
     }),
 
     updateClubUsers: build.mutation({
@@ -294,7 +347,7 @@ export const userAPI = createApi({
           expand: "workout_id",
         },
       }),
-      providesTags: ["WActivity"],
+      providesTags: ["WActivity", "Event"],
     }),
 
     getWorkoutActivity: build.query({
@@ -396,7 +449,7 @@ export const userAPI = createApi({
         method: "PATCH",
         body: fields,
       }),
-      invalidatesTags: ["Event"],
+      invalidatesTags: ["Event", "WActivity"],
     }),
 
     deleteEvent: build.mutation({
@@ -409,8 +462,6 @@ export const userAPI = createApi({
 
     getUserClubsForEvents: build.query({
       query: ({ userId }) => {
-        console.log(userId);
-
         return {
           url: "/club/records",
           params: {
@@ -432,6 +483,28 @@ export const userAPI = createApi({
           },
         };
       },
+      providesTags: ["Event"],
+    }),
+
+    getEventsForUserClubsToday: build.query({
+      query: (userId) => {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, "0");
+        const dd = String(today.getDate()).padStart(2, "0");
+        const todayStr = `${yyyy}-${mm}-${dd}`;
+
+        return {
+          url: "/event/records",
+          params: {
+            filter:
+              // filter +
+              `date >= "${todayStr} 00:00:00" && date <= "${todayStr} 23:59:59" && user_id~"${userId}"`,
+            expand: "club_id,workout_id,user_id",
+          },
+        };
+      },
+      providesTags: ["Event", "WActivity"],
     }),
 
     getClubAdmins: build.query({
@@ -481,9 +554,155 @@ export const userAPI = createApi({
       }),
       providesTags: ["Club"],
     }),
+
+    addUserEvent: build.mutation({
+      query: (postData) => ({
+        url: `/userEvent/records`,
+        method: "POST",
+        body: postData,
+      }),
+    }),
+
+    getUserEvents: build.query({
+      query: ({ userId, eventId }) => ({
+        url: `/userEvent/records`,
+        params: {
+          filter: `user_id="${userId}" && event_id="${eventId}"`,
+          expand: "event_id",
+        },
+      }),
+      providesTags: ["UserEv"],
+    }),
+
+    addUserWorkoutActivity: build.mutation({
+      query: (postData) => ({
+        url: `/userWorkoutActivity/records`,
+        method: "POST",
+        body: postData,
+      }),
+    }),
+
+    createEventAndActivity: build.mutation({
+      async queryFn(
+        { eventData, activityData, userId },
+        _queryApi,
+        _extraOptions,
+        fetchWithBQ
+      ) {
+        try {
+          // 1. Создаем userEvent
+          const eventResult = await fetchWithBQ({
+            url: "/userEvent/records",
+            method: "POST",
+            body: eventData,
+          });
+          if (eventResult.error) return { error: eventResult.error };
+
+          const createdEvent = eventResult.data;
+
+          // 2. Создаем userActivity с привязкой к созданному userEvent
+          const activityResult = await Promise.all(
+            activityData.map((activity) =>
+              fetchWithBQ({
+                url: "/userWorkoutActivity/records",
+                method: "POST",
+                body: {
+                  ...activity,
+                  // user_id: userId,
+                  userEvent_id: createdEvent.id,
+                },
+              })
+            )
+          );
+
+          if (activityResult.error) {
+            // ❗ При желании можно сделать откат (удалить созданный event)
+            await fetchWithBQ({
+              url: `/userEvent/records/${createdEvent.id}`,
+              method: "DELETE",
+            });
+            return { error: activityResult.error };
+          }
+
+          return {
+            data: { createdEvent, createdActivity: activityResult.data },
+          };
+        } catch (error) {
+          return { error };
+        }
+      },
+      invalidatesTags: ["UserEv"],
+    }),
+
+    getUserClubActivities: build.query({
+      // Можно передать userId
+      async queryFn(userId, _queryApi, _extraOptions, fetchWithBQ) {
+        try {
+          // 1. Получаем клубы пользователя
+          const clubsRes = await fetchWithBQ({
+            url: `/club/records`,
+            params: {
+              filter: `user_id~"${userId}"`,
+              perPage: 200,
+            },
+          });
+
+          if (clubsRes.error) return { error: clubsRes.error };
+
+          const clubs = clubsRes.data.items || [];
+          if (clubs.length === 0) return { data: [] };
+
+          const clubIds = clubs.map((c) => c.id);
+          const filter = clubIds.map((id) => `relation~"${id}"`).join(" || ");
+          console.log(filter);
+
+          // 2. Получаем activity по клубам
+          const activitiesRes = await fetchWithBQ({
+            url: `/activity/records`,
+            params: {
+              filter,
+              expand: "relation",
+              perPage: 200,
+            },
+          });
+
+          if (activitiesRes.error) return { error: activitiesRes.error };
+
+          return { data: activitiesRes.data.items };
+        } catch (error) {
+          return { error };
+        }
+      },
+    }),
+
+    getUserWorkoutsActivities: build.query({
+      query: (userId) => ({
+        url: `userWorkoutActivity`,
+        params: {
+          filter: `user_id="${userId}"`,
+          expand: "userEvent_id.user_id,event_id",
+        },
+      }),
+      // providesTags: ["Club"],
+    }),
   }),
 });
 export const {
+  useLazyGetThisUserClubsQuery,
+  useAddClubMutation,
+
+  useGetUserEventsQuery,
+  useGetUserWorkoutsActivitiesQuery,
+
+  useAddUserGoalsMutation,
+
+  useGetUserClubActivitiesQuery,
+
+  useCreateEventAndActivityMutation,
+  useAddUserEventMutation,
+
+  useGetEventsForUserClubsTodayQuery,
+
   useUpdateClubRequestsMutation,
   useAddAdminMutation,
   useDeleteAdminMutation,
