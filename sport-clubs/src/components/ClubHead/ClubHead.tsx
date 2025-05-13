@@ -4,6 +4,8 @@ import ActionBtn from "../ActionBtn/ActionBtn";
 import ClubLeaveJoin from "../ClubLeaveJoin/ClubLeaveJoin";
 import { useUpdateClubUsersMutation } from "../../services/UserService";
 import pb from "../../lib/pocketbase";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { userSlice } from "../../store/reducers/UserSlice";
 
 interface Props {}
 
@@ -11,8 +13,14 @@ function ClubHead({ club, isUser }) {
   const { record: user } = JSON.parse(localStorage.getItem("pocketbase_auth"));
 
   const [updateClubUsers] = useUpdateClubUsersMutation();
-  const [member, setMember] = useState(findUser());
 
+  const dispatch = useAppDispatch();
+  const { setMember } = userSlice.actions;
+  const { isMember } = useAppSelector((state) => state.userReducer);
+
+  function findUser() {
+    return user.id == club?.user_id?.find((item) => item == user.id);
+  }
   async function createUserAchievementsFromClub(userId, clubId) {
     try {
       // 1. Получить все достижения клуба
@@ -80,12 +88,8 @@ function ClubHead({ club, isUser }) {
     }
   };
 
-  function findUser() {
-    return user.id == club?.user_id?.find((item) => item == user.id);
-  }
-
   useEffect(() => {
-    setMember(findUser());
+    dispatch(setMember(findUser()));
   }, [club, user.id == club?.user_id?.find((item) => item == user.id)]);
 
   return (
@@ -103,7 +107,7 @@ function ClubHead({ club, isUser }) {
 
         {club && (
           <ClubLeaveJoin
-            isMember={member}
+            isMember={isMember}
             club={club}
             handleUpdate={handleUpdate}
             setMember={setMember}

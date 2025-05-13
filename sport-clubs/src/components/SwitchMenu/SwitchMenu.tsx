@@ -3,7 +3,11 @@ import React from "react";
 
 interface Props {}
 
-function SwitchMenu({ menuList, activeStyle = null, blockOption = null }) {
+function SwitchMenu({
+  menuList,
+  activeStyle = null,
+  blockOption = null,
+}) {
   return (
     <ul className="w-[100%] h-[28px] flex text-[14px] font-medium text-center text-[#505050]">
       {menuList.map((item) => {

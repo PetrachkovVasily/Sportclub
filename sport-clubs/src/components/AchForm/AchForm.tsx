@@ -9,6 +9,8 @@ import {
 interface Props {}
 
 function AchForm({ id, activities, closeModal }) {
+  console.log(activities);
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [activity, setActivity] = useState(activities[0].name);

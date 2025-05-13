@@ -21,6 +21,8 @@ function Achievements({
   userAchievements = [],
   notUserAchievements = [],
 }) {
+  console.log(userAchievements);
+
   return (
     <>
       <div className="w-[100%] flex flex-col gap-[8px] items-center">
@@ -53,7 +55,7 @@ function Achievements({
         )}
         {isModal || <AchList userAchievements={userAchievements} />}
 
-        {isClub ? (
+        {isClub && !!notUserAchievements[0] ? (
           <div className="flex flex-col gap-[6px] mb-[6px]">
             <h3 className="text-[#505050] text-[14px] ">Not received</h3>
             <AchList

@@ -9,8 +9,11 @@ import {
   useDeleteClubActivityMutation,
   useGetClubActivitiesQuery,
   useGetClubWorkoutsQuery,
+  useGetSingleClubQuery,
 } from "../../../services/UserService";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
+import { userSlice } from "../../../store/reducers/UserSlice";
 
 export const Route = createFileRoute("/club/$id/workouts")({
   component: RouteComponent,
@@ -58,6 +61,23 @@ function RouteComponent() {
       setIsWAdd(false);
     }
   };
+
+  //////////////////
+
+  const { record: user } = JSON.parse(localStorage.getItem("pocketbase_auth"));
+  const club = useGetSingleClubQuery(id)?.data;
+
+  const dispatch = useAppDispatch();
+  const { setMember } = userSlice.actions;
+  const { isMember } = useAppSelector((state) => state.userReducer);
+
+  function findUser() {
+    return user.id == club?.user_id?.find((item) => item == user.id);
+  }
+
+  useEffect(() => {
+    dispatch(setMember(findUser()));
+  }, [club, user.id == club?.user_id?.find((item) => item == user.id)]);
 
   return (
     <article className="w-[100%] flex flex-col gap-[22px]">

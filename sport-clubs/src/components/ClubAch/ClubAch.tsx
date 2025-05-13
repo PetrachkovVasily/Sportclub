@@ -2,15 +2,61 @@ import React from "react";
 import Achievement from "../Achievement/Achievement";
 import deleteBtn from "../../assets/delete-1-svgrepo-com 1.svg";
 import { useDeleteClubAchievementMutation } from "../../services/UserService";
+import pb from "../../lib/pocketbase";
 
 interface Props {}
 
-function ClubAch({ name, info, date, progress = 0, id, isUser = true }) {
+function ClubAch({
+  name,
+  info,
+  date,
+  progress = 0,
+  id,
+  isUser = true,
+  userId,
+  isMember,
+}) {
   const [deleteAchievement] = useDeleteClubAchievementMutation();
 
+  async function deleteUserAchievementByUserAndClubAchievement(
+    userId,
+    clubAchievementId
+  ) {
+    try {
+      // Получаем все UserAchievement с указанным user_id и clubAchievement_id
+      const userAchievements = await pb
+        .collection("userAchievement")
+        .getFullList({
+          filter: `user_id = "${userId}" && achievement_id = "${clubAchievementId}"`,
+          perPage: 500,
+        });
+
+      if (userAchievements.length === 0) {
+        console.log("Не найдено соответствующих пользовательских достижений.");
+        return;
+      }
+
+      // Удаляем все найденные записи (на случай, если их несколько)
+      for (const achievement of userAchievements) {
+        await pb.collection("userAchievement").delete(achievement.id);
+        console.log(`Удалено пользовательское достижение: ${achievement.id}`);
+      }
+
+      console.log(
+        "Все соответствующие пользовательские достижения удалены успешно."
+      );
+    } catch (error) {
+      console.error("Ошибка при удалении пользовательского достижения:", error);
+    }
+  }
+
   const handleDelete = () => {
+    deleteUserAchievementByUserAndClubAchievement(userId, id);
     deleteAchievement(id);
   };
+
+  console.log(isUser, isMember);
+
   return (
     <div className="w-full flex items-center gap-[16px] ">
       <div
@@ -33,9 +79,13 @@ function ClubAch({ name, info, date, progress = 0, id, isUser = true }) {
         </h3>
       </div>
       {isUser || (
-        <button onClick={handleDelete}>
-          <img className="w-[22px] " src={deleteBtn} alt="" />
-        </button>
+        <>
+          {!isMember || (
+            <button onClick={handleDelete}>
+              <img className="w-[22px] " src={deleteBtn} alt="" />
+            </button>
+          )}
+        </>
       )}
     </div>
   );

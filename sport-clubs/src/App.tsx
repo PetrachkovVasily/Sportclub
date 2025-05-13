@@ -16,10 +16,6 @@ declare module "@tanstack/react-router" {
 }
 
 function App() {
-  // const { increment } = userSlice.actions;
-  // const dispatch = useAppDispatch();
-  // const { error, isLoading } = useAppSelector((state) => state.userReducer);
-
   // console.log(error);
 
   // function clickHandler() {
@@ -30,6 +26,7 @@ function App() {
 
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+
   const dispatch = useAppDispatch();
 
   if (token && userId) {

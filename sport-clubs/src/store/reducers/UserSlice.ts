@@ -2,26 +2,21 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IUser } from "../../models/IUser";
 
 interface UserState {
-  users: IUser[];
-  isLoading: boolean;
-  error: string;
+  isMember: boolean;
 }
 
 const initialState: UserState = {
-  users: [],
-  isLoading: false,
-  error: "",
+  isMember: false,
 };
 
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    increment(state, action: PayloadAction<string>) {
-      state.error += action.payload;
+    setMember(state, action: PayloadAction<boolean>) {
+      state.isMember = action.payload;
     },
   },
 });
 
 export default userSlice.reducer;
-

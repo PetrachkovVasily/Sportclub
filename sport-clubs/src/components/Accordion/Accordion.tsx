@@ -24,7 +24,7 @@ function Accordion({ activities, workout }) {
   // const workoutActivity = useGetWorkoutActivityQuery(workout.id);
   const handleAdd = () => {
     addWorkoutActivity({
-      activity: activities[0].name,
+      activity: activities[0] ? activities[0].name : "",
       amount: 0,
       approaches: 0,
       workout_id: workout.id,
@@ -124,22 +124,30 @@ function Accordion({ activities, workout }) {
         aria-labelledby="accordion-collapse-heading-1"
       >
         <div className="py-[8px] px-[16px] rounded-b-[4px] bg-[#404040]/6 flex flex-col items-center gap-[8px] w-[100%] ">
-          {workoutActivities?.map((item) => {
-            return (
-              <AccordionItem
-                activities={activities}
-                workoutActivity={item}
-                key={item.id}
-              />
-            );
-          })}
+          {activities[0] ? (
+            <>
+              {workoutActivities?.map((item) => {
+                return (
+                  <AccordionItem
+                    activities={activities}
+                    workoutActivity={item}
+                    key={item.id}
+                  />
+                );
+              })}
 
-          <button
-            onClick={handleAdd}
-            className="mt-[4px] bg-white rounded-2xl "
-          >
-            <img src={addBtn} alt="" />
-          </button>
+              <button
+                onClick={handleAdd}
+                className="mt-[4px] bg-white rounded-2xl "
+              >
+                <img src={addBtn} alt="" />
+              </button>
+            </>
+          ) : (
+            <h3 className="text-[14px] font-normal text-[#505050] ">
+              No activities
+            </h3>
+          )}
         </div>
       </div>
     </div>

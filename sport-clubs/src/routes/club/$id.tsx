@@ -22,6 +22,8 @@ import Line from "../../components/Line/Line";
 import pb from "../../lib/pocketbase";
 import UserReques from "../../components/UserItem/UserReques";
 import pb1 from "../../lib/p1";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { userSlice } from "../../store/reducers/UserSlice";
 
 export const Route = createFileRoute("/club/$id")({
   component: RouteComponent,
@@ -110,6 +112,20 @@ function RouteComponent() {
 
   const clubAchievements = useGetClubAchievementsQuery(id)?.data?.items;
 
+  const dispatch = useAppDispatch();
+  const { setMember } = userSlice.actions;
+  const { isMember } = useAppSelector((state) => state.userReducer);
+
+  function findUser() {
+    return user.id == club?.user_id?.find((item) => item == user.id);
+  }
+
+  useEffect(() => {
+    dispatch(setMember(findUser()));
+  }, [club, user.id == club?.user_id?.find((item) => item == user.id)]);
+
+  console.log(isMember);
+
   return (
     <PageWrapper>
       <article className="max-w-[880px] w-[100%] flex flex-col gap-[24px] ">
@@ -117,7 +133,7 @@ function RouteComponent() {
         <div className="w-[100%] max-w-[880px]">
           <SwitchMenu
             menuList={menuList}
-            blockOption={isUser ? "Workouts" : null}
+            blockOption={isUser || !isMember ? "Workouts" : null}
           />
           <section className="flex flex-col rounded-b-[8px] bg-white w-[100%] max-w-[880px] gap-[24px] p-[16px] py-[24px]">
             <Outlet />
@@ -203,8 +219,12 @@ function RouteComponent() {
                   userAchAmount={userAchievements.length}
                   clubAchAmount={clubAchievements.length}
                   clubId={club?.id}
-                  userAchievements={userAchievements}
-                  notUserAchievements={notUserAchievements}
+                  userAchievements={userAchievements.filter(
+                    (item) => item.expand.achievement_id.club_id == id
+                  )}
+                  notUserAchievements={notUserAchievements.filter(
+                    (item) => item.expand.achievement_id.club_id == id
+                  )}
                 />
               )}
             </>

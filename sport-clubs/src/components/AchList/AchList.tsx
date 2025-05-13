@@ -5,6 +5,8 @@ import profileImg from "../../assets/profileImg.png";
 interface Props {}
 
 function AchList({ isClub = false, userAchievements = [], isNot = false }) {
+  console.log(userAchievements);
+
   return (
     <div className="w-[100%] flex gap-[4px] mb-[8px]">
       {userAchievements.map((item, i, arr) => {
