@@ -27,7 +27,6 @@ function WorkoutBlock({ event, user }) {
   //   console.log(userEvent);
 
   const [isFin, setIsFin] = useState(false);
-  console.log(isFin);
 
   useEffect(() => {
     if (userEvent) {
@@ -55,14 +54,26 @@ function WorkoutBlock({ event, user }) {
       (item, index, self) =>
         index === self.findIndex((t) => t.activity == item.activity)
     );
+    for (const item of result) {
+      await incrementUserAchievementsByClubAct(
+        user.id,
+        item.activity,
+        item.amount
+      );
+    }
 
-    result.forEach((item) => {
-      incrementUserAchievementsByClubAct(user.id, item.activity, item.amount);
-    });
+    // result.forEach((item) => {
+    //   incrementUserAchievementsByClubAct(user.id, item.activity, item.amount);
+    //   console.log(item);
+    // });
 
-    result.forEach((item) => {
-      incrementUserGoalsAmountByAct(user.id, item.activity, item.amount);
-    });
+    for (const item of result) {
+      await incrementUserGoalsAmountByAct(user.id, item.activity, item.amount);
+    }
+
+    // result.forEach((item) => {
+    //   incrementUserGoalsAmountByAct(user.id, item.activity, item.amount);
+    // });
 
     const time1 = new Date(`1970-01-01T${event.startTime}:00`);
     const time2 = new Date(`1970-01-01T${event.endTime}:00`);
@@ -87,6 +98,7 @@ function WorkoutBlock({ event, user }) {
     actValue,
     incrementAmount
   ) {
+    console.log(userId, actValue, incrementAmount);
     try {
       // 1. Получить все пользовательские достижения с expand clubAchievement
       const userAchievements = await pb
@@ -117,6 +129,8 @@ function WorkoutBlock({ event, user }) {
 
           const isReceived = newAmount >= limit;
 
+          console.log(newAmount);
+
           console.log(isReceived);
           return pb.collection("userAchievement").update(ua.id, {
             currentAmount: newAmount,
@@ -142,6 +156,8 @@ function WorkoutBlock({ event, user }) {
     incrementAmount
   ) {
     try {
+      // console.log(userId, activityValue, incrementAmount);
+
       // 1. Получить цели с нужным act
       const goals = await pb.collection("goal").getFullList({
         filter: `user_id = "${userId}" && activity_name = "${activityValue}"`,
