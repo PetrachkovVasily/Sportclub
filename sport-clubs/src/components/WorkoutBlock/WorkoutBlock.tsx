@@ -147,6 +147,8 @@ function WorkoutBlock({ event, user }) {
         filter: `user_id = "${userId}" && activity_name = "${activityValue}"`,
       });
 
+      console.log(incrementAmount);
+
       if (goals.length === 0) {
         console.log("Нет целей для обновления");
         return [];
@@ -209,7 +211,7 @@ function WorkoutBlock({ event, user }) {
         <div className="flex flex-col items-center gap-[4px] ">
           <img className="w-[60px] " src={profileImg} alt="" />
           <h1 className="text-[22px] font-normal text-[#505050] ">
-            {event.expand.club_id.name}
+            {event.expand.club_id?.name}
           </h1>
           <h3 className="text-[14px] font-semibold text-[#505050] ">
             {event.startTime}-{event.endTime}

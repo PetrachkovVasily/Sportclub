@@ -145,8 +145,6 @@ function RouteComponent() {
   const { setMember } = userSlice.actions;
   const { isMember } = useAppSelector((state) => state.userReducer);
 
-  console.log(isMember);
-
   function findUser() {
     return user.id == club?.user_id?.find((item) => item == user.id);
   }
@@ -157,6 +155,8 @@ function RouteComponent() {
   // useEffect(() => {
   //   if (club && club?.user_id?.find((item) => item == user.id)) setMember(true);
   // }, [club]);
+
+  console.log(notUserAchievements);
 
   return (
     <article className="w-[100%] flex flex-col gap-[12px]">

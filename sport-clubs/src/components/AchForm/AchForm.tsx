@@ -23,7 +23,7 @@ function AchForm({ id, activities, closeModal }) {
       name: name,
       description: description,
       activity: activity,
-      amount: amount,
+      limit: amount,
       club_id: id,
     });
 
